@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div class="layout-content" layout:fragment="corpo">
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2 class="titulo">Cartões</h2>
+			</div>
+			<div class="col-md-2 offset-md-6">
+				<a class="btn btn-success" th:href="@{/cartoes/cadastro}">Novo Cartão <i class="bi bi-plus"></i></a>
+			</div>
+			<hr>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped table-sm">
+				<thead>
+					<tr>
+						<th scope="col">Código</th>
+						<th scope="col">Nome</th>
+						<th scope="col">Número Final</th>
+						<th scope="col">Limite</th>
+						<th scope="col">Ativo</th>
+						<th scope="col">Dia de vencimento</th>
+						<th scope="col">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Cartao 1</td>
+						<td>8227</td>
+						<td>100</td>
+						<td>1</td>
+						<td>5</td>
+						<td>
+							<div class="btn-toolbar" role="toolbar" aria-label="Toolbar btn">
+
+								<div class="btn-group me-2" role="group" aria-label="add">
+									<button class="btn btn-outline-success" type="button" data-bs-toggle="tooltip"
+										data-bs-placement="top" title="Detalhes">
+										<i class="bi bi-search"></i>
+									</button>
+								</div>
+
+								<div class="btn-group me-2" role="group" aria-label="edt">
+									<button class="btn btn-outline-warning" type="button" data-bs-toggle="tooltip"
+										data-bs-placement="top" title="Editar">
+										<i class="bi bi-pen"></i></button>
+								</div>
+								<div class="btn-group" role="group" aria-label="del">
+									<button class="btn btn-outline-danger" type="button" data-bs-toggle="tooltip"
+										data-bs-placement="top" title="Checar como pago">
+										<i class="bi bi-check-circle"></i></button>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+	<script th:src="~{}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript"></script>
+</body>
+
+</html>

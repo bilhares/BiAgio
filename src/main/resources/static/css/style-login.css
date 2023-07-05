@@ -1,0 +1,45 @@
+body {
+	background-color: #213458cf;
+}
+
+
+#form-container {
+	padding: 50px;
+}
+
+#main-container {
+	background-color: #FFF;
+	border-radius: 15px;
+	box-shadow: .5px 10px 15px rgba(0, 0, 0, .2);
+	margin: 30px auto;
+	padding: 0px;
+}
+
+#main-container input[type="submit"],
+#main-container input[type="checkbox"]:checked {
+	background-color: #213458;
+	border-color: #213458;
+}
+
+#main-container input[type="submit"]:hover {
+	background-color: #213458cf;
+}
+
+
+.title {
+	font-size: 1.75em;
+	margin-bottom: 0.4em;
+	position: relative;
+}
+
+.title-underline {
+	display: inline-block;
+	width: 10%;
+	border-bottom: 5px solid #213458cf;
+	margin-bottom: 10px;
+}
+
+#link-container {
+	text-align: center;
+	padding-top: 25px;
+}

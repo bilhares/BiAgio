@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div class="layout-content" layout:fragment="corpo">
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2 class="titulo">Cadastrar Cartão</h2>
+			</div>
+			<hr>
+		</div>
+
+		<form class="row g-3" th:action="${cartao.id == null} ? @{/cartoes/cadastro/salvar} : @{/cartoes/cadastro/editar}" th:object="${cartao}" method="POST">
+			<div class="col-md-3">
+				<label for="nome" class="form-label">Nome do Cartão</label>
+				<input type="text" class="form-control" id="nome" th:field="*{nome}">
+			</div>
+			<div class="col-md-3">
+				<label for="numero-final" class="form-label">Número final</label>
+				<input type="number" class="form-control" id="numero-final" th:field="*{numeroFinal}">
+			</div>
+			<div class="col-md-3">
+				<label for="limite" class="form-label">Limite</label>
+				<input type="number" class="form-control" id="limite" th:field="*{limite}">
+			</div>
+			<div class="col-md-3">
+				<label for="dia-vencimento" class="form-label">Dia de vencimento da fatura</label>
+				<input type="number" class="form-control" id="dia-vencimento" th:field="*{diaVencimento}">
+			</div>
+
+			<div class="col-12">
+				<button type="submit" class="btn btn-primary">Cadastrar</button>
+			</div>
+		</form>
+
+	</div>
+	<script th:src="~{}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript"></script>
+</body>
+
+</html>
