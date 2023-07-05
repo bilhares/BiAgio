@@ -25,40 +25,40 @@
 						<th scope="col">Nome</th>
 						<th scope="col">Número Final</th>
 						<th scope="col">Limite</th>
-						<th scope="col">Ativo</th>
 						<th scope="col">Dia de vencimento</th>
+						<th scope="col">Ativo</th>
 						<th scope="col">Ações</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Cartao 1</td>
-						<td>8227</td>
-						<td>100</td>
-						<td>1</td>
-						<td>5</td>
+					<tr th:each="c : ${cartoes}">
+						<td th:text="${c.id}"></td>
+						<td th:text="${c.nome}"></td>
+						<td th:text="${c.numeroFinal}"></td>
+						<td th:text="${c.limite}"></td>
+						<td th:text="${c.diaVencimento}"></td>
+						<td>
+							<i th:if="${c.ativo}" class="bi bi-circle-fill text-success"></i>
+							<i th:unless="${c.ativo}" class="bi-circle-fill text-danger"></i>
+						</td>
 						<td>
 							<div class="btn-toolbar" role="toolbar" aria-label="Toolbar btn">
-
-								<div class="btn-group me-2" role="group" aria-label="add">
-									<button class="btn btn-outline-success" type="button" data-bs-toggle="tooltip"
-										data-bs-placement="top" title="Detalhes">
-										<i class="bi bi-search"></i>
-									</button>
-								</div>
-
 								<div class="btn-group me-2" role="group" aria-label="edt">
-									<button class="btn btn-outline-warning" type="button" data-bs-toggle="tooltip"
-										data-bs-placement="top" title="Editar">
-										<i class="bi bi-pen"></i></button>
+									<a th:href="@{/cartoes/editar/{id} (id=${c.id})}" class="btn btn-outline-warning"
+										type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+										<i class="bi bi-pen"></i></a>
 								</div>
+								
 								<div class="btn-group" role="group" aria-label="del">
-									<button class="btn btn-outline-danger" type="button" data-bs-toggle="tooltip"
-										data-bs-placement="top" title="Checar como pago">
-										<i class="bi bi-check-circle"></i></button>
+									
+									<button class="btn btn-outline-danger" type="button" data-bs-toggle="modal"
+										th:attr="data-bs-target='#modal'+${c.id}" data-bs-placement="top" title="Inativar Cartão"
+										th:data-id="${c.id}" th:data-nome="${c.nome}">
+										<i class="bi bi-pause"></i></button>
+										
 								</div>
 							</div>
+							<div th:replace="~{fragments/modal :: modal(${c.id}, ${c.nome})}"></div>
 						</td>
 					</tr>
 				</tbody>
@@ -66,8 +66,6 @@
 		</div>
 
 	</div>
-	<script th:src="~{}" th:fragment="js"></script>
-	<script th:inline="javascript" th:fragment="inlinescript"></script>
 </body>
 
 </html>

@@ -12,10 +12,21 @@
 			<div class="col-md-4">
 				<h2 class="titulo">Cadastrar Cartão</h2>
 			</div>
+			<div class="col-md-2 offset-md-6">
+				<a class="btn btn-success" th:href="@{/cartoes/listar}">Listar Cartões <i class="bi bi-list"></i></a>
+			</div>
 			<hr>
 		</div>
 
-		<form class="row g-3" th:action="${cartao.id == null} ? @{/cartoes/cadastro/salvar} : @{/cartoes/cadastro/editar}" th:object="${cartao}" method="POST">
+		<div th:replace="~{fragments/alert}"></div>
+
+		<form class="row g-3"
+			th:action="${cartao.id == null} ? @{/cartoes/cadastro/salvar} : @{/cartoes/cadastro/editar}"
+			th:object="${cartao}" method="POST">
+
+			<input type="hidden" id="id" th:field="*{id}" />
+
+			<div th:replace="~{fragments/validacao :: validacao}"></div>
 			<div class="col-md-3">
 				<label for="nome" class="form-label">Nome do Cartão</label>
 				<input type="text" class="form-control" id="nome" th:field="*{nome}">
@@ -39,8 +50,7 @@
 		</form>
 
 	</div>
-	<script th:src="~{}" th:fragment="js"></script>
-	<script th:inline="javascript" th:fragment="inlinescript"></script>
+
 </body>
 
 </html>
