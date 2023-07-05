@@ -48,17 +48,22 @@
 										type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
 										<i class="bi bi-pen"></i></a>
 								</div>
-								
+
 								<div class="btn-group" role="group" aria-label="del">
-									
-									<button class="btn btn-outline-danger" type="button" data-bs-toggle="modal"
-										th:attr="data-bs-target='#modal'+${c.id}" data-bs-placement="top" title="Inativar Cartão"
-										th:data-id="${c.id}" th:data-nome="${c.nome}">
+
+									<button th:if="${c.ativo}" class="btn btn-outline-danger" type="button"
+										data-bs-toggle="modal" th:attr="data-bs-target='#modal'+${c.id}"
+										data-bs-placement="top" title="Inativar Cartão">
 										<i class="bi bi-pause"></i></button>
-										
+
+									<a th:unless="${c.ativo}" class="btn btn-outline-success" type="button"
+										data-bs-toggle="modal" th:attr="data-bs-target='#modal'+${c.id}"
+										data-bs-placement="top" title="Ativar Cartão">
+										<i class="bi bi-play"></i></a>
+
 								</div>
 							</div>
-							<div th:replace="~{fragments/modal :: modal(${c.id}, ${c.nome})}"></div>
+							<div th:replace="~{fragments/modal :: modal(${c})}"></div>
 						</td>
 					</tr>
 				</tbody>

@@ -81,5 +81,21 @@ public class CartaoController {
 
 		return "redirect:/cartoes/listar";
 	}
+	
+	
+	@GetMapping("/ativar/{id}")
+	public String ativar(@PathVariable("id") Long id, RedirectAttributes attr) {
+
+		Optional<Cartao> cartaoOpt = cartaoRepository.findById(id);
+		if (cartaoOpt.isEmpty())
+			attr.addFlashAttribute("falha", "Cartão não encontrado");
+
+		Cartao cartao = cartaoOpt.get();
+		cartao.setAtivo(true);
+
+		cartaoRepository.save(cartao);
+
+		return "redirect:/cartoes/listar";
+	}
 
 }

@@ -1,19 +1,27 @@
-<div th:fragment="modal(id, nome)">
+<div th:fragment="modal(cartao)">
 
-	<div class="modal fade" th:attr="id='modal'+${id}" tabindex="-1" aria-labelledby="confirmModalLabel"
+	<div class="modal fade" th:attr="id='modal'+${cartao.id}" tabindex="-1" aria-labelledby="confirmModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="confirmModalLabel">Inativar Cartão</h5>
+					<h5 class="modal-title" id="confirmModalLabel">Alterar status do cartão</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<p>Deseja inativar o cartão <span th:text="${'#'+id+' '+nome}"></span>?</p>
+					<p>
+						Deseja 
+						<span th:if="${cartao.ativo}">Inativar</span>
+						<span th:unless="${cartao.ativo}">Ativar</span> 
+						o cartão 
+						<span th:text="${'#'+cartao.id+' '+cartao.nome}"></span>
+						?
+					</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<a th:href="@{/cartoes/inativar/{id}(id=${id})}" class="btn btn-danger">Inativar</a>
+					<a th:if="${cartao.ativo}" th:href="@{/cartoes/inativar/{id}(id=${cartao.id})}" class="btn btn-danger">Inativar</a>
+					<a th:unless="${cartao.ativo}" th:href="@{/cartoes/ativar/{id}(id=${cartao.id})}" class="btn btn-success">Ativar</a>
 				</div>
 			</div>
 		</div>
