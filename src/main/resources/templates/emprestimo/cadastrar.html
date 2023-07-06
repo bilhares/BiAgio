@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div class="layout-content" layout:fragment="corpo">
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2 class="titulo">Cadastrar Empréstimo</h2>
+			</div>
+			<div class="col-md-2 offset-md-6">
+				<a class="btn btn-success" th:href="@{/cartoes/listar}">Listar Empréstimos <i
+						class="bi bi-list"></i></a>
+			</div>
+			<hr>
+		</div>
+
+		<div th:replace="~{fragments/alert}"></div>
+
+		<form class="row g-3"
+			th:action="${emprestimo.id == null} ? @{/emprestimos/cadastro/salvar} : @{/emprestimos/cadastro/editar}"
+			th:object="${emprestimo}" method="POST">
+
+			<input type="hidden" id="id" th:field="*{id}" />
+
+			<div th:replace="~{fragments/validacao :: validacao}"></div>
+			<div class="col-md-3">
+				<label for="nome" class="form-label">Nome do Emprestimo</label>
+				<input type="text" class="form-control" id="nome" th:field="*{nome}">
+			</div>
+			<div class="col-md-3">
+				<label for="valor-total" class="form-label">Valor Total</label>
+				<input type="number" class="form-control" id="valor-total" th:field="*{valorTotal}">
+			</div>
+			<div class="col-md-3">
+				<label for="qtd-parcelas" class="form-label">Qtd. Parcelas</label>
+				<input type="number" class="form-control" id="qtd-parcelas" th:field="*{qtdParcelas}">
+			</div>
+			<div class="col-md-3 mb-3">
+				<label for="valor-parcela" class="form-label">Valor Parcela</label>
+				<input type="number" class="form-control" id="valor-parcela" th:field="*{valorParcela}">
+			</div>
+
+			<div class="col-md-3">
+				<label for="cartao">Cartão</label>
+				<select class="form-select" id="cartao" th:field="*{cartao}">
+					<option value="">Selecione...</option>
+					<option th:each="c : ${cartoes}" th:value="${c.id}" th:text="${c.nome}"></option>
+				</select>
+			</div>
+
+			<div class="col-md-3 mb-3">
+				<label for="endividado">Endividado</label>
+				<select class="form-select" id="endividado" th:field="*{endividado}">
+					<option value="">Selecione...</option>
+					<option th:each="c : ${endividados}" th:value="${c.id}" th:text="${c.nome}"></option>
+				</select>
+			</div>
+
+			<div class="form-row">
+				<div class="col-md-6">
+					<label for="descricao" class="form-label">Descrição</label>
+					<textarea class="form-control" id="descricao" rows="3" th:field="*{descricao}"></textarea>
+				</div>
+			</div>
+
+
+			<div class="col-12">
+				<button type="submit" class="btn btn-primary">Cadastrar</button>
+			</div>
+		</form>
+
+	</div>
+
+</body>
+
+</html>

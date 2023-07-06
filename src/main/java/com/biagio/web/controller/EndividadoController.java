@@ -31,7 +31,7 @@ public class EndividadoController {
 	}
 
 	@GetMapping("/cadastro")
-	public String cadastro(Endividado cartao) {
+	public String cadastro(Endividado entity) {
 		return "/endividado/cadastrar";
 	}
 

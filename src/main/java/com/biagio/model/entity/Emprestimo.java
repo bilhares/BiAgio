@@ -19,15 +19,15 @@ public class Emprestimo extends AbstractEntity {
 	@Column(name = "nome", nullable = false)
 	private String nome;
 
-	@NotBlank(message = "Valor total obrigatório.")
+	@NotNull(message = "Valor total obrigatório.")
 	@Column(name = "valor_total", nullable = false)
 	private BigDecimal valorTotal;
 
-	@NotBlank(message = "Valor da parcela obrigatório.")
+	@NotNull(message = "Valor da parcela obrigatório.")
 	@Column(name = "valor_parcela", nullable = false)
 	private BigDecimal valorParcela;
 
-	@NotBlank(message = "Quantidade de parcelas obrigatório.")
+	@NotNull(message = "Quantidade de parcelas obrigatório.")
 	@Column(name = "qtd_parcelas", nullable = false)
 	private int qtdParcelas;
 

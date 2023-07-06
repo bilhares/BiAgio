@@ -21,6 +21,9 @@ public class ControleEmprestimoParcela extends AbstractEntity {
 
 	@Column(name = "data_emprestimo", nullable = false)
 	private LocalDateTime dataEmprestimo;
+	
+	@Column(name = "data_vencimento", nullable = false)
+	private LocalDateTime dataVencimento;
 
 	@Column(name = "numero_parcela", nullable = false)
 	private int numeroParcela;
@@ -72,4 +75,13 @@ public class ControleEmprestimoParcela extends AbstractEntity {
 		this.status = status;
 	}
 
+	public LocalDateTime getDataVencimento() {
+		return dataVencimento;
+	}
+
+	public void setDataVencimento(LocalDateTime dataVencimento) {
+		this.dataVencimento = dataVencimento;
+	}
+
+	
 }
