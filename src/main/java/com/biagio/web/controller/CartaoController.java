@@ -61,6 +61,7 @@ public class CartaoController {
 		if (result.hasErrors()) {
 			return "/cartao/cadastrar";
 		}
+		cartao.setAtivo(true);
 		cartaoRepository.save(cartao);
 		attr.addFlashAttribute("sucesso", "Cartão atualizado com sucesso!");
 
@@ -81,8 +82,7 @@ public class CartaoController {
 
 		return "redirect:/cartoes/listar";
 	}
-	
-	
+
 	@GetMapping("/ativar/{id}")
 	public String ativar(@PathVariable("id") Long id, RedirectAttributes attr) {
 
@@ -94,6 +94,21 @@ public class CartaoController {
 		cartao.setAtivo(true);
 
 		cartaoRepository.save(cartao);
+
+		return "redirect:/cartoes/listar";
+	}
+
+	@GetMapping("/excluir/{id}")
+	public String excluir(@PathVariable("id") Long id, RedirectAttributes attr) {
+
+		Optional<Cartao> cartaoOpt = cartaoRepository.findById(id);
+		if (cartaoOpt.isEmpty())
+			attr.addFlashAttribute("falha", "Cartão não encontrado");
+
+		Cartao cartao = cartaoOpt.get();
+		cartao.setAtivo(true);
+
+		cartaoRepository.delete(cartao);
 
 		return "redirect:/cartoes/listar";
 	}

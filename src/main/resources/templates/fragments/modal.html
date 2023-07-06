@@ -1,4 +1,4 @@
-<div th:fragment="modal(cartao)">
+<div th:fragment="modalAlterarCartao(cartao)">
 
 	<div class="modal fade" th:attr="id='modal'+${cartao.id}" tabindex="-1" aria-labelledby="confirmModalLabel"
 		aria-hidden="true">
@@ -22,6 +22,64 @@
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 					<a th:if="${cartao.ativo}" th:href="@{/cartoes/inativar/{id}(id=${cartao.id})}" class="btn btn-danger">Inativar</a>
 					<a th:unless="${cartao.ativo}" th:href="@{/cartoes/ativar/{id}(id=${cartao.id})}" class="btn btn-success">Ativar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="modalAlterarEndividado(endividado)">
+
+	<div class="modal fade" th:attr="id='modal'+${endividado.id}" tabindex="-1" aria-labelledby="confirmModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmModalLabel">Alterar status do endividado</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Deseja 
+						<span th:if="${endividado.ativo}">Inativar</span>
+						<span th:unless="${endividado.ativo}">Ativar</span> 
+						o endividado 
+						<span th:text="${'#'+endividado.id+' '+endividado.nome}"></span>
+						?
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<a th:if="${endividado.ativo}" th:href="@{/endividados/inativar/{id}(id=${endividado.id})}" class="btn btn-danger">Inativar</a>
+					<a th:unless="${endividado.ativo}" th:href="@{/endividados/ativar/{id}(id=${endividado.id})}" class="btn btn-success">Ativar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="modalExcluirCartao(cartao)">
+
+	<div class="modal fade" th:attr="id='modal_exclusao'+${cartao.id}" tabindex="-1" aria-labelledby="confirmModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmModalLabel">Excluir Cartão</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Deseja 
+						Excluir
+						o cartão 
+						<span th:text="${'#'+cartao.id+' '+cartao.nome}"></span>
+						?
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<a th:href="@{/cartoes/excluir/{id}(id=${cartao.id})}" class="btn btn-danger">Excluir Cartão</a>
 				</div>
 			</div>
 		</div>

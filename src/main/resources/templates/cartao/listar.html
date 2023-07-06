@@ -10,7 +10,7 @@
 
 		<div class="row">
 			<div class="col-md-4">
-				<h2 class="titulo">Cartões</h2>
+				<h2 class="titulo"> <i class="fs-4 bi-card-heading"></i> Cartões</h2>
 			</div>
 			<div class="col-md-2 offset-md-6">
 				<a class="btn btn-success" th:href="@{/cartoes/cadastro}">Novo Cartão <i class="bi bi-plus"></i></a>
@@ -49,21 +49,30 @@
 										<i class="bi bi-pen"></i></a>
 								</div>
 
-								<div class="btn-group" role="group" aria-label="del">
+								<div class="btn-group me-2" role="group" aria-label="del">
 
 									<button th:if="${c.ativo}" class="btn btn-outline-danger" type="button"
 										data-bs-toggle="modal" th:attr="data-bs-target='#modal'+${c.id}"
 										data-bs-placement="top" title="Inativar Cartão">
 										<i class="bi bi-pause"></i></button>
 
-									<a th:unless="${c.ativo}" class="btn btn-outline-success" type="button"
+									<button th:unless="${c.ativo}" class="btn btn-outline-success" type="button"
 										data-bs-toggle="modal" th:attr="data-bs-target='#modal'+${c.id}"
 										data-bs-placement="top" title="Ativar Cartão">
-										<i class="bi bi-play"></i></a>
+										<i class="bi bi-play"></i></button>
+
+								</div>
+
+								<div class="btn-group me-2" role="group" aria-label="edt">
+
+									<button class="btn btn-outline-danger" type="button" data-bs-toggle="modal"
+										th:attr="data-bs-target='#modal_exclusao'+${c.id}" title="Excluir">
+										<i class="bi bi-trash"></i></button>
 
 								</div>
 							</div>
-							<div th:replace="~{fragments/modal :: modal(${c})}"></div>
+							<div th:replace="~{fragments/modal :: modalAlterarCartao(${c})}"></div>
+							<div th:replace="~{fragments/modal :: modalExcluirCartao(${c})}"></div>
 						</td>
 					</tr>
 				</tbody>

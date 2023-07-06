@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div class="layout-content" layout:fragment="corpo">
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2 class="titulo">Cadastrar Endividado</h2>
+			</div>
+			<div class="col-md-2 offset-md-6">
+				<a class="btn btn-success" th:href="@{/endividados/listar}">Listar Endividados <i class="bi bi-list"></i></a>
+			</div>
+			<hr>
+		</div>
+
+		<div th:replace="~{fragments/alert}"></div>
+
+		<form class="row g-3"
+			th:action="${endividado.id == null} ? @{/endividados/cadastro/salvar} : @{/endividados/cadastro/editar}"
+			th:object="${endividado}" method="POST">
+
+			<input type="hidden" id="id" th:field="*{id}" />
+
+			<div th:replace="~{fragments/validacao :: validacao}"></div>
+			<div class="col-md-3">
+				<label for="nome" class="form-label">Nome do Cartão</label>
+				<input type="text" class="form-control" id="nome" th:field="*{nome}">
+			</div>
+			<div class="col-md-3">
+				<label for="cpf" class="form-label">CPF</label>
+				<input type="text" class="form-control" id="cpf" th:field="*{cpf}">
+			</div>
+			
+			<div class="col-12">
+				<button type="submit" class="btn btn-primary">Cadastrar</button>
+			</div>
+		</form>
+
+	</div>
+
+</body>
+
+</html>
