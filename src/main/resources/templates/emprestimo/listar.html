@@ -13,7 +13,8 @@
 				<h2 class="titulo"><i class="fs-4 bi-pen"></i> Empréstimos</h2>
 			</div>
 			<div class="col-md-2 offset-md-6">
-				<a class="btn btn-success" th:href="@{/emprestimos/cadastro}">Novo Empréstimo <i class="bi bi-plus"></i></a>
+				<a class="btn btn-success" th:href="@{/emprestimos/cadastro}">Novo Empréstimo <i
+						class="bi bi-plus"></i></a>
 			</div>
 			<hr>
 		</div>
@@ -37,9 +38,9 @@
 					<tr th:each="e : ${emprestimos}">
 						<td th:text="${e.id}"></td>
 						<td th:text="${e.nome}"></td>
-						<td th:text="${e.valorTotal}"></td>
+						<td th:text="|R$ ${{e.valorTotal}}|"></td>
 						<td th:text="${e.qtdParcelas}"></td>
-						<td th:text="${e.valorParcela}"></td>
+						<td th:text="|R$ ${{e.valorParcela}}|"></td>
 						<td th:text="${e.descricao}"></td>
 						<td th:text="${e.cartao.nome}"></td>
 						<td th:text="${e.endividado.nome}"></td>
@@ -49,9 +50,11 @@
 						</td>
 						<td>
 							<div class="btn-toolbar" role="toolbar" aria-label="Toolbar btn">
+
 								<div class="btn-group me-2" role="group" aria-label="edt">
-									<a th:href="@{/endividados/editar/{id} (id=${e.id})}" class="btn btn-outline-warning"
-										type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+									<a th:href="@{/emprestimos/editar/{id} (id=${e.id})}"
+										class="btn btn-outline-warning" type="button" data-bs-toggle="tooltip"
+										data-bs-placement="top" title="Editar">
 										<i class="bi bi-pen"></i></a>
 								</div>
 
@@ -69,7 +72,7 @@
 
 								</div>
 							</div>
-							
+
 							<div th:replace="~{fragments/modal :: modalAlterarEndividado(${e})}"></div>
 						</td>
 					</tr>

@@ -37,7 +37,7 @@
 			</div>
 			<div class="col-md-3">
 				<label for="limite" class="form-label">Limite</label>
-				<input type="number" class="form-control" id="limite" th:field="*{limite}">
+				<input type="text" class="form-control" id="limite" data-mask="#.##0,00" data-mask-reverse="true" th:field="*{limite}">
 			</div>
 			<div class="col-md-3">
 				<label for="dia-vencimento" class="form-label">Dia de vencimento da fatura</label>

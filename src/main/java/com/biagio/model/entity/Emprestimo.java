@@ -1,11 +1,16 @@
 package com.biagio.model.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,10 +26,12 @@ public class Emprestimo extends AbstractEntity {
 
 	@NotNull(message = "Valor total obrigatório.")
 	@Column(name = "valor_total", nullable = false)
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
 	private BigDecimal valorTotal;
 
 	@NotNull(message = "Valor da parcela obrigatório.")
 	@Column(name = "valor_parcela", nullable = false)
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
 	private BigDecimal valorParcela;
 
 	@NotNull(message = "Quantidade de parcelas obrigatório.")
@@ -44,6 +51,9 @@ public class Emprestimo extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "endividado_id")
 	private Endividado endividado;
+
+	@OneToMany(mappedBy = "emprestimo")
+	private List<ControleEmprestimoParcela> parcelas;
 
 	public String getNome() {
 		return nome;
@@ -99,6 +109,14 @@ public class Emprestimo extends AbstractEntity {
 
 	public void setEndividado(Endividado endividado) {
 		this.endividado = endividado;
+	}
+
+	public List<ControleEmprestimoParcela> getParcelas() {
+		return parcelas;
+	}
+
+	public void setParcelas(List<ControleEmprestimoParcela> parcelas) {
+		this.parcelas = parcelas;
 	}
 
 }

@@ -35,7 +35,7 @@
 						<td th:text="${c.id}"></td>
 						<td th:text="${c.nome}"></td>
 						<td th:text="${c.numeroFinal}"></td>
-						<td th:text="${c.limite}"></td>
+						<td th:text="|R$ ${{c.limite}}|"></td>
 						<td th:text="${c.diaVencimento}"></td>
 						<td>
 							<i th:if="${c.ativo}" class="bi bi-circle-fill text-success"></i>
