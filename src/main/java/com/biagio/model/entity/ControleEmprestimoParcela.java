@@ -1,5 +1,6 @@
 package com.biagio.model.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -23,7 +24,7 @@ public class ControleEmprestimoParcela extends AbstractEntity {
 	private LocalDateTime dataEmprestimo;
 	
 	@Column(name = "data_vencimento", nullable = false)
-	private LocalDateTime dataVencimento;
+	private LocalDate dataVencimento;
 
 	@Column(name = "numero_parcela", nullable = false)
 	private int numeroParcela;
@@ -75,13 +76,12 @@ public class ControleEmprestimoParcela extends AbstractEntity {
 		this.status = status;
 	}
 
-	public LocalDateTime getDataVencimento() {
+	public LocalDate getDataVencimento() {
 		return dataVencimento;
 	}
 
-	public void setDataVencimento(LocalDateTime dataVencimento) {
+	public void setDataVencimento(LocalDate dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
 
-	
 }

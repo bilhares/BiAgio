@@ -43,7 +43,7 @@ CREATE TABLE controle_emprestimo_parcela
 
     emprestimo_id BIGINT NOT NULL FOREIGN KEY REFERENCES emprestimo(id), 
     data_emprestimo DATETIME NOT NULL,
-    data_vencimento DATETIME NOT NULL,
+    data_vencimento DATE NOT NULL,
     numero_parcela int NOT NULL,
     parcela_atual BIT NOT NULL,
     status VARCHAR(50)

@@ -39,7 +39,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">
+							<a class="nav-link" th:href="@{/faturas/listar(page=${1})}">
 								<i class="fs-4 bi-pen"></i>
 								Faturas
 							</a>
@@ -94,7 +94,10 @@
 			return new bootstrap.Tooltip(tooltip)
 		})
 
-
+		
+		$("#formCadastroEndividado").submit(function () {
+			$("#cpf").unmask();
+		});
 	</script>
 
 </body>

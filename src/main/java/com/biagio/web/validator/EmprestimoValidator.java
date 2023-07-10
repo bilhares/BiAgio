@@ -18,11 +18,11 @@ public class EmprestimoValidator implements Validator {
 	public void validate(Object obj, Errors errors) {
 		Emprestimo emprestimo = (Emprestimo) obj;
 
-		if (emprestimo.getCartao().getLimite().compareTo(emprestimo.getValorTotal()) != 0) {
+		if (emprestimo.getCartao().getLimite().compareTo(emprestimo.getValorTotal()) < 0) {
 			errors.rejectValue("valorParcela", "cartaoSemLimite.emprestimo");
 		}
 
-		if (emprestimo.getQtdParcelas() == 1 && emprestimo.getValorTotal() != emprestimo.getValorParcela()) {
+		if (emprestimo.getQtdParcelas() == 1 && emprestimo.getValorTotal().compareTo(emprestimo.getValorParcela()) != 0) {
 			errors.rejectValue("valorParcela", "valorTotalEValorParcelaDivergentes.emprestimo");
 		} else if (emprestimo.getQtdParcelas() > 1) {
 			BigDecimal somaTotalParcelas = emprestimo.getValorParcela()

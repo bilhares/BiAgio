@@ -1,7 +1,7 @@
 package com.biagio.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class EmprestimoService {
 	@Transactional(readOnly = false)
 	public void criarEmprestimo(Emprestimo emprestimo) {
 
-		LocalDateTime dataVencimento = LocalDateTime.now().plusMonths(1)
+		LocalDate dataVencimento = LocalDate.now().plusMonths(1)
 				.withDayOfMonth(emprestimo.getCartao().getDiaVencimento());
 
 		emprestimo.setAtivo(true);
