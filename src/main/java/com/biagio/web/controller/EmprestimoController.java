@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,7 @@ import com.biagio.repository.CartaoRepository;
 import com.biagio.repository.EmprestimoRepository;
 import com.biagio.repository.EndividadoRepository;
 import com.biagio.service.EmprestimoService;
+import com.biagio.web.validator.EmprestimoValidator;
 
 import jakarta.validation.Valid;
 
@@ -38,6 +41,11 @@ public class EmprestimoController {
 
 	@Autowired
 	EmprestimoService service;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(new EmprestimoValidator());
+	}
 
 	@GetMapping("/listar")
 	public String listar(ModelMap model) {
