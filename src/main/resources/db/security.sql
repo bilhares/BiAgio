@@ -31,3 +31,13 @@ insert into perfil values
 
 insert into usuario_perfil values
 (1,1)
+
+-- insert common user:usuario@agiotagem.com pass: user
+insert into usuario
+(ativo, email, senha)
+VALUES
+(1, 'usuario@agiotagem.com', '$2a$10$E45PJbrRV6Rr40WhLHHGGO9lO7bDXLG71QnYe.0qF.VlJ/szS6QaC')
+
+insert into usuario_perfil values
+((select id from perfil where descricao = 'USUARIO'),
+(select id from usuario where email = 'usuario@agiotagem.com'))

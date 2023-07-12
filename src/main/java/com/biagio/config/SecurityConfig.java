@@ -35,8 +35,10 @@ public class SecurityConfig {
 			// acessos públicos liberados
 			.requestMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
 			
+			//acessos geral
+			.requestMatchers("/", "/home", "/faturas/**").hasAnyAuthority(ADMIN, USUARIO)
 			// acessos privados admin
-			.requestMatchers("/", "/home").hasAnyAuthority(ADMIN)
+			.requestMatchers("/cartoes/**", "/emprestimos/**", "/endividados/**").hasAuthority(ADMIN)
 			
 			.anyRequest().authenticated()
 		)

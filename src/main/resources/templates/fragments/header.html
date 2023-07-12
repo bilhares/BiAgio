@@ -17,6 +17,8 @@
 		<div class="navbar-nav" id="logout">
 			<div class="nav-item text-nowrap">
 				<form sec:authorize="isAuthenticated()" class="d-flex" th:action="@{/logout}" method="post">
+					<!-- Add the text here -->
+					<span style="margin-right: 100px;" class="titulo" sec:authentication="name">Bob</span>
 					<button class="btn btn-warning px-3" type="submit">Logout</button>
 				</form>
 			</div>

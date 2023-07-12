@@ -44,19 +44,19 @@
 								Faturas
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
 							<a class="nav-link" th:href="@{/emprestimos/listar}">
 								<i class="fs-4 bi-list-check"></i>
 								Empréstimos
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
 							<a class="nav-link" th:href="@{/endividados/listar}">
 								<i class="fs-4 bi-people"></i>
 								Endividados
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
 							<a class="nav-link" th:href="@{/cartoes/listar}">
 								<i class="fs-4 bi-card-heading"></i>
 								Cartões
