@@ -1,5 +1,6 @@
 package com.biagio.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.model.entity.StatusParcela;
 
@@ -56,4 +58,25 @@ public class FaturaRepository {
 		return Long.valueOf(totalCount);
 	}
 
+	public List<DetalheFaturaDTO> obterDetalhesDaFatura(Long cartaoId, LocalDate dataVencimento) {
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT NEW com.biagio.model.dto.DetalheFaturaDTO( ");
+		sql.append("ce.id, c.id, e.id, ");
+		sql.append("c.nome, ce.dataEmprestimo, ce.dataVencimento, ");
+		sql.append("ce.numeroParcela, ce.parcelaAtual, ce.status, ");
+		sql.append("e.nome, e.valorParcela, e.qtdParcelas, e.valorTotal ");
+		sql.append(") ");
+		sql.append("FROM ControleEmprestimoParcela ce ");
+		sql.append("JOIN ce.emprestimo e ");
+		sql.append("JOIN e.cartao c ");
+		sql.append("WHERE ");
+		sql.append("ce.dataVencimento = :dataVencimento ");
+		sql.append("AND c.id = :cartaoId ");
+
+		List<DetalheFaturaDTO> resultList = entityManager.createQuery(sql.toString(), DetalheFaturaDTO.class)
+				.setParameter("dataVencimento", dataVencimento).setParameter("cartaoId", cartaoId).getResultList();
+
+		return resultList;
+	}
 }

@@ -1,6 +1,7 @@
 package com.biagio.web.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.service.FaturaService;
 
@@ -45,7 +47,10 @@ public class FaturaController {
 	public String detalhesFatura(@PathVariable("id") Long cartaoId,
 			@PathVariable("dtVencimento") LocalDate dtVencimento, ModelMap model) {
 
+		List<DetalheFaturaDTO> detalhes = faturaService.obterDetalhesFatura(cartaoId, dtVencimento);
+
 		model.addAttribute("dtVencimento", dtVencimento);
+		model.addAttribute("detalhes", detalhes);
 		return "/fatura/cadastrar";
 	}
 
