@@ -28,10 +28,14 @@ public class FaturaRepository {
 
 		StringBuilder sql = new StringBuilder();
 
-		sql.append("SELECT NEW com.biagio.model.dto.FaturaDTO(ce.dataVencimento, SUM(e.valorParcela), c.id, c.nome) ")
-				.append("FROM ControleEmprestimoParcela ce ").append("JOIN ce.emprestimo e ").append("JOIN e.cartao c ")
-				.append("WHERE e.ativo = 1 ").append("AND ce.status = :statusParcela ")
-				.append("GROUP BY ce.dataVencimento, c.id, c.nome ").append("ORDER BY ce.dataVencimento");
+		sql.append("SELECT NEW com.biagio.model.dto.FaturaDTO(ce.dataVencimento, SUM(e.valorParcela), c.id, c.nome) ");
+		sql.append("FROM ControleEmprestimoParcela ce ");
+		sql.append("JOIN ce.emprestimo e ");
+		sql.append("JOIN e.cartao c ");
+		sql.append("WHERE e.ativo = 1 ");
+		sql.append("AND ce.status = :statusParcela ");
+		sql.append("GROUP BY ce.dataVencimento, c.id, c.nome ");
+		sql.append("ORDER BY ce.dataVencimento");
 
 		Long totalResults = count(status, sql);
 

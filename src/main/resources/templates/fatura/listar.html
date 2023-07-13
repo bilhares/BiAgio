@@ -27,13 +27,13 @@
 				</thead>
 				<tbody>
 					<tr th:each="f : ${page.content}">
-						<td th:text="${f.dataVencimento}"></td>
-						<td th:text="${f.valor}"></td>
+						<td th:text="${#temporals.format(f.dataVencimento, 'dd/MM/yyyy')}"></td>
+						<td th:text="|R$ ${{f.valor}}|"></td>
 						<td th:text="${f.nomeCartao}"></td>
 						<td>
 							<div class="btn-toolbar" role="toolbar" aria-label="Toolbar btn">
 								<div class="btn-group me-2" role="group" aria-label="edt">
-									<a th:href="@{/faturas/editar/{id} (id=${f.cartao})}"
+									<a th:href="@{/faturas/detalhes/{id}/{dtVencimento} (id=${f.cartao}, dtVencimento=${f.dataVencimento})}"
 										class="btn btn-outline-primary" type="button" data-bs-toggle="tooltip"
 										data-bs-placement="top" title="Detalhes">
 										<i class="bi bi-search"></i></a>

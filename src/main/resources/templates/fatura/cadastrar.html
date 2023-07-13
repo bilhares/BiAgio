@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div class="layout-content" layout:fragment="corpo">
+
+		<div class="row">
+			<div class="col-md-6">
+				<h2 class="titulo"><i class="fs-4 bi-pen"></i> Detalhes Fatura <span th:text="${#temporals.format(dtVencimento, 'dd/MM/yyyy')}"></span></h2>
+			</div>
+			<hr>
+		</div>
+
+	</div>
+</body>
+
+</html>

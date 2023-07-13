@@ -1,5 +1,6 @@
 package com.biagio.web.controller;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,6 +39,14 @@ public class FaturaController {
 		model.addAttribute("totalDeRegistros", acutalPage.getTotalElements());
 
 		return "/fatura/listar";
+	}
+
+	@GetMapping("/detalhes/{id}/{dtVencimento}")
+	public String detalhesFatura(@PathVariable("id") Long cartaoId,
+			@PathVariable("dtVencimento") LocalDate dtVencimento, ModelMap model) {
+
+		model.addAttribute("dtVencimento", dtVencimento);
+		return "/fatura/cadastrar";
 	}
 
 }
