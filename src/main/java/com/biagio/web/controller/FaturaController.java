@@ -27,13 +27,14 @@ public class FaturaController {
 			@RequestParam("size") Optional<Integer> size) {
 
 		int currentPage = page.orElse(1);
-		int pageSize = size.orElse(2);
+		int pageSize = size.orElse(5);
 
 		Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
 
 		Page<FaturaDTO> acutalPage = faturaService.obterFaturas(pageable);
 
 		model.addAttribute("page", acutalPage);
+		model.addAttribute("totalDeRegistros", acutalPage.getTotalElements());
 
 		return "/fatura/listar";
 	}
