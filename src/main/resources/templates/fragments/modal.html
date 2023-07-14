@@ -85,3 +85,30 @@
 		</div>
 	</div>
 </div>
+
+<div th:fragment="modalDecisaoPagamentoFatura(fatura)">
+
+	<div class="modal fade" th:attr="id='modal_decisao_fatura'+${fatura.cartao}" tabindex="-1" aria-labelledby="confirmModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-center" id="confirmModalLabel">Escolha uma opção</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Pagamento da fatura:
+						<span th:text="${'#'+fatura.nomeCartao+' '+fatura.dataVencimento}"></span>
+					</p>
+				</div>
+				<div class="modal-footer d-flex justify-content-center">
+					<button type="button" class="btn btn-primary btn-block" data-bs-dismiss="modal">Realizar pagamento total</button>
+					<a  class="btn btn-warning btn-block">Realizar pagamento parcial</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

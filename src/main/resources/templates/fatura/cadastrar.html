@@ -14,14 +14,52 @@
 						th:text="${#temporals.format(dtVencimento, 'dd/MM/yyyy')}"></span></h2>
 			</div>
 			<div class="col-md-2 offset-md-4">
-				<a class="btn btn-success" th:href="@{/faturas/listar}">Listar Faturas <i
-						class="bi bi-list"></i></a>
+				<a class="btn btn-success" th:href="@{/faturas/listar}">Listar Faturas <i class="bi bi-list"></i></a>
 			</div>
 			<hr>
 		</div>
 
-
-	</div>
+		<div class="table-responsive">
+			<table class="table table-striped table-sm">
+				<thead>
+					<tr>
+						<th scope="col">Empréstimo</th>
+						<th scope="col">Cartão</th>
+						<th scope="col">Data do empréstimo</th>
+						<th scope="col">Data de vencimento</th>
+						<th scope="col">Número parcela</th>
+						<th scope="col">Status parcela</th>
+						<th scope="col">Valor da parcela</th>
+						<th scope="col">Qtd. parcelas</th>
+						<th scope="col">Valor total</th>
+						<th scope="col">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="d : ${detalhes}">
+						<td th:text="${d.nomeCompra}"></td>
+						<td th:text="${d.nomeCartao}"></td>
+						<td th:text="${#temporals.format(d.dataEmprestimo, 'dd/MM/yyyy')}"></td>
+						<td th:text="${#temporals.format(d.dataVencimento, 'dd/MM/yyyy')}"></td>
+						<td th:text="${d.numeroParcela}"></td>
+						<td th:text="${d.status}"></td>
+						<td th:text="|R$ ${{d.valorParcela}}|"></td>
+						<td th:text="${d.qtdParcelas}"></td>
+						<td th:text="|R$ ${{d.valorTotal}}|"></td>
+						<td>
+							<div class="btn-toolbar" role="toolbar" aria-label="Toolbar btn">
+								<div class="btn-group me-2" role="group" aria-label="edt">
+									<a th:href="@{/faturas/detalhes/{id}/{dtVencimento} (id=${d.cartao}, dtVencimento=${d.dataVencimento})}"
+										class="btn btn-outline-danger" type="button" data-bs-toggle="tooltip"
+										data-bs-placement="top" title="Informar Pagamento">
+										<i class="bi bi-check"></i></a>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 </body>
 
 </html>

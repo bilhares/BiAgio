@@ -38,7 +38,17 @@
 										data-bs-placement="top" title="Detalhes">
 										<i class="bi bi-search"></i></a>
 								</div>
+								<div class="btn-group" role="group" aria-label="edt">
+								<!--	<a th:href="@{/faturas/detalhes}" class="btn btn-outline-danger" type="button"
+										data-bs-toggle="tooltip" data-bs-placement="top" title="Informar Pagamento">
+										<i class="bi bi-check"></i></a>-->
+
+									<button class="btn btn-outline-danger" type="button" data-bs-toggle="modal"
+										th:attr="data-bs-target='#modal_decisao_fatura'+${f.cartao}" title="Informar Pagamento">
+										<i class="bi bi-check"></i></button>
+								</div>
 							</div>
+							<div th:replace="~{fragments/modal :: modalDecisaoPagamentoFatura(${f})}"></div>
 						</td>
 					</tr>
 				</tbody>
