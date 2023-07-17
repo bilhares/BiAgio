@@ -1,6 +1,7 @@
 package com.biagio.web.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.FaturaDTO;
+import com.biagio.model.entity.ControleEmprestimoParcela;
 import com.biagio.service.FaturaService;
 
 @Controller
@@ -52,6 +55,45 @@ public class FaturaController {
 		model.addAttribute("dtVencimento", dtVencimento);
 		model.addAttribute("detalhes", detalhes);
 		return "/fatura/cadastrar";
+	}
+
+	@GetMapping("/pagamento/total/{id}/{dtVencimento}")
+	public String efetuarPagamentoTotal(@PathVariable("id") Long cartaoId,
+			@PathVariable("dtVencimento") LocalDate dtVencimento, RedirectAttributes attr) {
+
+		try {
+			faturaService.efetuarPagamentoTotal(cartaoId, dtVencimento);
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String dtVencimentoFormatada = dtVencimento.format(formatter);
+
+			attr.addFlashAttribute("sucesso",
+					"Pagamento da fatura " + dtVencimentoFormatada + " realizado com sucesso!");
+		} catch (Exception e) {
+			attr.addFlashAttribute("erro", "Erro ao realizar pagamento " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/faturas/listar";
+	}
+
+	@GetMapping("/pagamento/parcela/{id}")
+	public String efetuarPagamentoTotal(@PathVariable("id") Long idParcela, RedirectAttributes attr) {
+
+		try {
+			ControleEmprestimoParcela parcela = faturaService.efetuarPagamentoParcela(idParcela);
+
+			attr.addFlashAttribute("sucesso",
+					"Pagamento da parcela " + parcela.getEmprestimo().getNome() + " realizado com sucesso!");
+
+			return "redirect:/faturas/detalhes/" + parcela.getEmprestimo().getCartao().getId() + "/"
+					+ parcela.getDataVencimento();
+		} catch (Exception e) {
+			attr.addFlashAttribute("erro", "Erro ao realizar pagamento " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/faturas/listar";
 	}
 
 }

@@ -103,8 +103,33 @@
 					</p>
 				</div>
 				<div class="modal-footer d-flex justify-content-center">
-					<button type="button" class="btn btn-primary btn-block" data-bs-dismiss="modal">Realizar pagamento total</button>
-					<a  class="btn btn-warning btn-block">Realizar pagamento parcial</a>
+					<a  class="btn btn-primary btn-block" th:href="@{/faturas/pagamento/total/{id}/{dtVencimento}(id=${fatura.cartao}, dtVencimento=${fatura.dataVencimento})}">Realizar pagamento total</a>
+					<a  class="btn btn-warning btn-block" >Realizar pagamento parcial</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="modalPagamentoParcela(parcela)">
+
+	<div class="modal fade" th:attr="id='modal_pagamento_parcela'+${parcela.parcela}" tabindex="-1" aria-labelledby="confirmModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-center" id="confirmModalLabel">Pagamento de parcela</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Informar pagamento da parcela: 
+						<span th:text="${parcela.dataVencimento}"></span>
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<a th:href="@{/faturas/pagamento/parcela/{id}(id=${parcela.parcela})}" class="btn btn-danger">Pagar</a>
 				</div>
 			</div>
 		</div>

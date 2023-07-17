@@ -18,7 +18,7 @@
 			</div>
 			<hr>
 		</div>
-
+		<div th:replace="~{fragments/alert}"></div>
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
 				<thead>
@@ -49,12 +49,14 @@
 						<td>
 							<div class="btn-toolbar" role="toolbar" aria-label="Toolbar btn">
 								<div class="btn-group me-2" role="group" aria-label="edt">
-									<a th:href="@{/faturas/detalhes/{id}/{dtVencimento} (id=${d.cartao}, dtVencimento=${d.dataVencimento})}"
-										class="btn btn-outline-danger" type="button" data-bs-toggle="tooltip"
-										data-bs-placement="top" title="Informar Pagamento">
-										<i class="bi bi-check"></i></a>
+
+									<button class="btn btn-outline-danger" type="button" data-bs-toggle="modal"
+										th:attr="data-bs-target='#modal_pagamento_parcela'+${d.parcela}"
+										title="Informar Pagamento">
+										<i class="bi bi-check"></i></button>
 								</div>
 							</div>
+							<div th:replace="~{fragments/modal :: modalPagamentoParcela(${d})}"></div>
 						</td>
 					</tr>
 				</tbody>
