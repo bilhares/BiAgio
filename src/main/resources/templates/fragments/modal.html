@@ -10,18 +10,20 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						Deseja 
+						Deseja
 						<span th:if="${cartao.ativo}">Inativar</span>
-						<span th:unless="${cartao.ativo}">Ativar</span> 
-						o cartão 
+						<span th:unless="${cartao.ativo}">Ativar</span>
+						o cartão
 						<span th:text="${'#'+cartao.id+' '+cartao.nome}"></span>
 						?
 					</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<a th:if="${cartao.ativo}" th:href="@{/cartoes/inativar/{id}(id=${cartao.id})}" class="btn btn-danger">Inativar</a>
-					<a th:unless="${cartao.ativo}" th:href="@{/cartoes/ativar/{id}(id=${cartao.id})}" class="btn btn-success">Ativar</a>
+					<a th:if="${cartao.ativo}" th:href="@{/cartoes/inativar/{id}(id=${cartao.id})}"
+						class="btn btn-danger">Inativar</a>
+					<a th:unless="${cartao.ativo}" th:href="@{/cartoes/ativar/{id}(id=${cartao.id})}"
+						class="btn btn-success">Ativar</a>
 				</div>
 			</div>
 		</div>
@@ -40,18 +42,20 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						Deseja 
+						Deseja
 						<span th:if="${endividado.ativo}">Inativar</span>
-						<span th:unless="${endividado.ativo}">Ativar</span> 
-						o endividado 
+						<span th:unless="${endividado.ativo}">Ativar</span>
+						o endividado
 						<span th:text="${'#'+endividado.id+' '+endividado.nome}"></span>
 						?
 					</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<a th:if="${endividado.ativo}" th:href="@{/endividados/inativar/{id}(id=${endividado.id})}" class="btn btn-danger">Inativar</a>
-					<a th:unless="${endividado.ativo}" th:href="@{/endividados/ativar/{id}(id=${endividado.id})}" class="btn btn-success">Ativar</a>
+					<a th:if="${endividado.ativo}" th:href="@{/endividados/inativar/{id}(id=${endividado.id})}"
+						class="btn btn-danger">Inativar</a>
+					<a th:unless="${endividado.ativo}" th:href="@{/endividados/ativar/{id}(id=${endividado.id})}"
+						class="btn btn-success">Ativar</a>
 				</div>
 			</div>
 		</div>
@@ -70,9 +74,9 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						Deseja 
+						Deseja
 						Excluir
-						o cartão 
+						o cartão
 						<span th:text="${'#'+cartao.id+' '+cartao.nome}"></span>
 						?
 					</p>
@@ -88,8 +92,8 @@
 
 <div th:fragment="modalDecisaoPagamentoFatura(fatura)">
 
-	<div class="modal fade" th:attr="id='modal_decisao_fatura'+${fatura.cartao}" tabindex="-1" aria-labelledby="confirmModalLabel"
-		aria-hidden="true">
+	<div class="modal fade" th:attr="id='modal_decisao_fatura'+${fatura.cartao}" tabindex="-1"
+		aria-labelledby="confirmModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -103,8 +107,13 @@
 					</p>
 				</div>
 				<div class="modal-footer d-flex justify-content-center">
-					<a  class="btn btn-primary btn-block" th:href="@{/faturas/pagamento/total/{id}/{dtVencimento}(id=${fatura.cartao}, dtVencimento=${fatura.dataVencimento})}">Realizar pagamento total</a>
-					<a  class="btn btn-warning btn-block" >Realizar pagamento parcial</a>
+					<a class="btn btn-primary btn-block"
+						th:href="@{/faturas/pagamento/total/{id}/{dtVencimento}(id=${fatura.cartao}, dtVencimento=${fatura.dataVencimento})}">Realizar
+						pagamento total</a>
+
+					<button class="btn btn-warning btn-block" data-bs-toggle="modal"
+						th:attr="data-bs-target='#modal_pagamento_parcial'+${f.cartao}">Realizar pagamento
+						parcial</button>
 				</div>
 			</div>
 		</div>
@@ -113,8 +122,8 @@
 
 <div th:fragment="modalPagamentoParcela(parcela)">
 
-	<div class="modal fade" th:attr="id='modal_pagamento_parcela'+${parcela.parcela}" tabindex="-1" aria-labelledby="confirmModalLabel"
-		aria-hidden="true">
+	<div class="modal fade" th:attr="id='modal_pagamento_parcela'+${parcela.parcela}" tabindex="-1"
+		aria-labelledby="confirmModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -123,17 +132,43 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						Informar pagamento da parcela: 
+						Informar pagamento da parcela:
 						<span th:text="${parcela.dataVencimento}"></span>
 					</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<a th:href="@{/faturas/pagamento/parcela/{id}(id=${parcela.parcela})}" class="btn btn-danger">Pagar</a>
+					<a th:href="@{/faturas/pagamento/parcela/{id}(id=${parcela.parcela})}"
+						class="btn btn-danger">Pagar</a>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
+<div th:fragment="modalPagamentoParcial(fatura)">
 
+	<div class="modal fade" th:attr="id='modal_pagamento_parcial'+${fatura.cartao}" tabindex="-1"
+		aria-labelledby="pagamentoParcialModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="pagamentoParcialModalLabel">Realizar pagamento parcial</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="formPagamentoParcial" th:action="@{/faturas/pagamento/parcial/{id}/{dtVencimento}(id=${fatura.cartao}, dtVencimento=${fatura.dataVencimento})}" method="get">
+						<div class="mb-3">
+							<label for="pagamentoParcialInput" class="form-label">Valor do pagamento parcial:</label>
+							<input type="text" class="form-control" id="pagamentoParcialInput"  data-mask="#.##0,00" data-mask-reverse="true" name="valor" >
+						</div>
+						<button type="submit" class="btn btn-primary">Realizar pagamento</button>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

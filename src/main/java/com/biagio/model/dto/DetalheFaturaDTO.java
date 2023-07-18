@@ -21,10 +21,11 @@ public class DetalheFaturaDTO {
 	private BigDecimal valorParcela;
 	private int qtdParcelas;
 	private BigDecimal valorTotal;
+	private BigDecimal desconto;
 
 	public DetalheFaturaDTO(Long parcela, Long cartao, Long emprestimo, String nomeCartao, LocalDateTime dataEmprestimo,
 			LocalDate dataVencimento, int numeroParcela, boolean parcelaAtual, StatusParcela status, String nomeCompra,
-			BigDecimal valorParcela, int qtdParcelas, BigDecimal valorTotal) {
+			BigDecimal valorParcela, int qtdParcelas, BigDecimal valorTotal, BigDecimal desconto) {
 		super();
 		this.parcela = parcela;
 		this.cartao = cartao;
@@ -39,6 +40,7 @@ public class DetalheFaturaDTO {
 		this.valorParcela = valorParcela;
 		this.qtdParcelas = qtdParcelas;
 		this.valorTotal = valorTotal;
+		this.desconto = desconto == null ? new BigDecimal(0) : desconto;
 	}
 
 	public DetalheFaturaDTO() {
@@ -147,6 +149,14 @@ public class DetalheFaturaDTO {
 
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
+	}
+
+	public BigDecimal getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(BigDecimal desconto) {
+		this.desconto = desconto;
 	}
 
 }

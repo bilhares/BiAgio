@@ -48,3 +48,5 @@ CREATE TABLE controle_emprestimo_parcela
     parcela_atual BIT NOT NULL,
     status VARCHAR(50)
 );
+
+ALTER TABLE controle_emprestimo_parcela ADD desconto DECIMAL(19,2) NULL;

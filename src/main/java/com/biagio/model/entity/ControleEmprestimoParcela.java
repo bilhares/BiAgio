@@ -1,7 +1,11 @@
 package com.biagio.model.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @SuppressWarnings("serial")
 @Entity
@@ -22,7 +27,7 @@ public class ControleEmprestimoParcela extends AbstractEntity {
 
 	@Column(name = "data_emprestimo", nullable = false)
 	private LocalDateTime dataEmprestimo;
-	
+
 	@Column(name = "data_vencimento", nullable = false)
 	private LocalDate dataVencimento;
 
@@ -35,6 +40,10 @@ public class ControleEmprestimoParcela extends AbstractEntity {
 	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private StatusParcela status;
+
+	@Column(name = "desconto", nullable = false)
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
+	private BigDecimal desconto;
 
 	public Emprestimo getEmprestimo() {
 		return emprestimo;
@@ -82,6 +91,14 @@ public class ControleEmprestimoParcela extends AbstractEntity {
 
 	public void setDataVencimento(LocalDate dataVencimento) {
 		this.dataVencimento = dataVencimento;
+	}
+
+	public BigDecimal getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(BigDecimal desconto) {
+		this.desconto = desconto;
 	}
 
 }

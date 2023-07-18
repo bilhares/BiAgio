@@ -1,5 +1,6 @@
 package com.biagio.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +53,41 @@ public class FaturaService {
 		}
 
 		return null;
+	}
+
+	public void efetuarPagamentoParcial(Long cartaoId, LocalDate dtVencimento, BigDecimal valorPagamento) {
+
+		List<DetalheFaturaDTO> faturas = obterDetalhesFatura(cartaoId, dtVencimento);
+
+		BigDecimal valorTotalFatura = faturas.stream().map(DetalheFaturaDTO::getValorParcela).reduce(BigDecimal.ZERO,
+				BigDecimal::add);
+
+		BigDecimal descontosNaFatura = faturas.stream().map(DetalheFaturaDTO::getDesconto).reduce(BigDecimal.ZERO,
+				BigDecimal::add);
+
+		BigDecimal valorDescontoPorCompra = calcularValorDoDescontoPorCompra(valorPagamento, faturas.size());
+
+		faturas.forEach(fatura -> {
+			Optional<ControleEmprestimoParcela> parcelaOpt = parcelaRepository.findById(fatura.getParcela());
+			if (parcelaOpt.isPresent()) {
+				ControleEmprestimoParcela parcela = parcelaOpt.get();
+
+				parcela.setDesconto(
+						parcela.getDesconto() != null ? parcela.getDesconto().add(valorDescontoPorCompra) : valorDescontoPorCompra);
+
+				BigDecimal totalDescontos = descontosNaFatura.add(valorPagamento);
+
+				if (totalDescontos.compareTo(valorTotalFatura) == 0) {
+					parcela.setStatus(StatusParcela.PAGO);
+				}
+
+				parcelaRepository.save(parcela);
+			}
+		});
+	}
+
+	private BigDecimal calcularValorDoDescontoPorCompra(BigDecimal valorPagamento, int totalFaturas) {
+		return valorPagamento.divide(BigDecimal.valueOf(totalFaturas));
 	}
 
 }

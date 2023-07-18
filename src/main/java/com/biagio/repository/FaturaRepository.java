@@ -30,13 +30,13 @@ public class FaturaRepository {
 
 		StringBuilder sql = new StringBuilder();
 
-		sql.append("SELECT NEW com.biagio.model.dto.FaturaDTO(ce.dataVencimento, SUM(e.valorParcela), c.id, c.nome) ");
+		sql.append("SELECT NEW com.biagio.model.dto.FaturaDTO(ce.dataVencimento, (SUM(e.valorParcela) - SUM(COALESCE(ce.desconto, 0))), c.id, c.nome) ");
 		sql.append("FROM ControleEmprestimoParcela ce ");
 		sql.append("JOIN ce.emprestimo e ");
 		sql.append("JOIN e.cartao c ");
 		sql.append("WHERE e.ativo = 1 ");
 		sql.append("AND ce.status = :statusParcela ");
-		sql.append("GROUP BY ce.dataVencimento, c.id, c.nome ");
+		sql.append("GROUP BY ce.dataVencimento, c.id, c.nome, ce.desconto ");
 		sql.append("ORDER BY ce.dataVencimento");
 
 		Long totalResults = count(status, sql);
@@ -65,7 +65,7 @@ public class FaturaRepository {
 		sql.append("ce.id, c.id, e.id, ");
 		sql.append("c.nome, ce.dataEmprestimo, ce.dataVencimento, ");
 		sql.append("ce.numeroParcela, ce.parcelaAtual, ce.status, ");
-		sql.append("e.nome, e.valorParcela, e.qtdParcelas, e.valorTotal ");
+		sql.append("e.nome, e.valorParcela, e.qtdParcelas, e.valorTotal, ce.desconto ");
 		sql.append(") ");
 		sql.append("FROM ControleEmprestimoParcela ce ");
 		sql.append("JOIN ce.emprestimo e ");

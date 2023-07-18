@@ -1,5 +1,6 @@
 package com.biagio.web.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -21,6 +22,7 @@ import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.model.entity.ControleEmprestimoParcela;
 import com.biagio.service.FaturaService;
+import com.biagio.util.FaturaUtils;
 
 @Controller
 @RequestMapping("faturas")
@@ -96,4 +98,25 @@ public class FaturaController {
 		return "redirect:/faturas/listar";
 	}
 
+	@GetMapping("/pagamento/parcial/{id}/{dtVencimento}")
+	public String efetuarPagamentoParcial(@PathVariable("id") Long cartaoId,
+			@PathVariable("dtVencimento") LocalDate dtVencimento, @RequestParam("valor") String valor,
+			RedirectAttributes attr) {
+
+		try {
+			BigDecimal valorPagamento = FaturaUtils.parseBigDecimal(valor);
+			faturaService.efetuarPagamentoParcial(cartaoId, dtVencimento, valorPagamento);
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String dtVencimentoFormatada = dtVencimento.format(formatter);
+
+			attr.addFlashAttribute("sucesso",
+					"Pagamento da fatura " + dtVencimentoFormatada + " realizado com sucesso!");
+		} catch (Exception e) {
+			attr.addFlashAttribute("erro", "Erro ao realizar pagamento " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/faturas/listar";
+	}
 }
