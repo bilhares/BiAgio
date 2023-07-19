@@ -9,59 +9,51 @@
 	<div class="layout-content" layout:fragment="corpo">
 
 		<h2 class="titulo">Seja Bem Vindo: <span th:text="${usuario.email}"></span></h2>
-		<hr/>
+		<hr />
 		<h2 class="titulo">Resumo das dívidas</h2>
 		<div class="row">
 			<div class="col">
 				<h5 class="subtitulo-fatura">Total</h5>
-				<h2 class="" id="valor-total">R$ 10.000,00 </h2>
+				<h2 class="" id="valor-total"><span th:text="|R$ ${{resumoFaturas.totalDevido}}|"></span> </h2>
 			</div>
 			<div class="col">
 				<h5 class="subtitulo-fatura">Próxima fatura</h5>
-				<h2><span id="valor-fatura">R$ 860,50</span> dia 25/06/2023</h2>
+				<div class="d-flex align-items-center">
+					<h2>
+						<span th:text="|R$ ${{resumoFaturas.valorProxFatura}}|"></span>
+						dia
+						<span th:text="${#temporals.format(resumoFaturas.dataProxFatura, 'dd/MM/yyyy')}"></span>
+					</h2>
+
+					<button class="btn btn-outline-danger ms-3" type="button" data-bs-toggle="modal"
+						title="Informar Pagamento">
+						<i class="bi bi-check"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 
 		<hr>
 
-		<h2 class="titulo">Próximas Faturas</h2>
+		<h2 class="titulo">Cartões</h2>
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
 				<thead>
 					<tr>
 						<th scope="col">Código</th>
-						<th scope="col">Valor</th>
-						<th scope="col">Data</th>
-						<th scope="col">Ações</th>
+						<th scope="col">Nome</th>
+						<th scope="col">Limite</th>
+						<th scope="col">Limite Disponível</th>
+						<th scope="col">Total Utilizado</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>850.67</td>
-						<td>05/07/2023</td>
-						<td>
-							<div class="btn-toolbar" role="toolbar" aria-label="Toolbar btn">
-
-								<div class="btn-group me-2" role="group" aria-label="add">
-									<button class="btn btn-outline-success" type="button" data-bs-toggle="tooltip"
-										data-bs-placement="top" title="Detalhes">
-										<i class="bi bi-search"></i>
-									</button>
-								</div>
-
-								<div class="btn-group me-2" role="group" aria-label="edt">
-									<button class="btn btn-outline-warning" type="button" data-bs-toggle="tooltip"
-										data-bs-placement="top" title="Editar">
-										<i class="bi bi-pen"></i></button>
-								</div>
-								<div class="btn-group" role="group" aria-label="del">
-									<button class="btn btn-outline-danger" type="button" data-bs-toggle="tooltip"
-										data-bs-placement="top" title="Checar como pago">
-										<i class="bi bi-check-circle"></i></button>
-								</div>
-							</div>
-						</td>
+					<tr th:each="d : ${resumoFaturas.cartoes}">
+						<td th:text="${d.id}"></td>
+						<td th:text="${d.nomeCartao}"></td>
+						<td th:text="|R$ ${{d.limite}}|"></td>
+						<td th:text="|R$ ${{d.limiteDisponivel}}|"></td>
+						<td th:text="|R$ ${{d.totaGasto}}|"></td>
 					</tr>
 				</tbody>
 			</table>

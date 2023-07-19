@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div class="layout-content" layout:fragment="corpo">
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2 class="titulo"> <i class="fs-4 bi-bar-chart-line"></i> Resumo das dívidas</h2>
+			</div>
+			<div class="col-md-2 offset-md-6">
+				<a class="btn btn-success" th:href="@{/cartoes/cadastro}">Novo Cartão <i class="bi bi-plus"></i></a>
+			</div>
+			<hr>
+		</div>
+
+	</div>
+	<script th:src="~{}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript"></script>
+</body>
+
+</html>

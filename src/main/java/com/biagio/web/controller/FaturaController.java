@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.model.entity.ControleEmprestimoParcela;
+import com.biagio.model.entity.StatusParcela;
 import com.biagio.service.FaturaService;
 import com.biagio.util.FaturaUtils;
 
@@ -40,7 +41,9 @@ public class FaturaController {
 
 		Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
 
-		Page<FaturaDTO> acutalPage = faturaService.obterFaturas(pageable);
+		List<StatusParcela> statusList = List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO);
+
+		Page<FaturaDTO> acutalPage = faturaService.obterFaturas(pageable, statusList);
 
 		model.addAttribute("page", acutalPage);
 		model.addAttribute("totalDeRegistros", acutalPage.getTotalElements());

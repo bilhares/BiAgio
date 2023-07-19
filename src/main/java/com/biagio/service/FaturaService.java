@@ -26,8 +26,8 @@ public class FaturaService {
 	@Autowired
 	FaturaRepository faturaRepository;
 
-	public Page<FaturaDTO> obterFaturas(Pageable pageable) {
-		return faturaRepository.obterTodasAsFaturasPorStatus(pageable, StatusParcela.NAO_PAGO);
+	public Page<FaturaDTO> obterFaturas(Pageable pageable, List<StatusParcela> statusList) {
+		return faturaRepository.obterTodasAsFaturasPorStatus(pageable, statusList);
 	}
 
 	public List<DetalheFaturaDTO> obterDetalhesFatura(Long cartaoId, LocalDate dataVencimento) {
@@ -72,8 +72,8 @@ public class FaturaService {
 			if (parcelaOpt.isPresent()) {
 				ControleEmprestimoParcela parcela = parcelaOpt.get();
 
-				parcela.setDesconto(
-						parcela.getDesconto() != null ? parcela.getDesconto().add(valorDescontoPorCompra) : valorDescontoPorCompra);
+				parcela.setDesconto(parcela.getDesconto() != null ? parcela.getDesconto().add(valorDescontoPorCompra)
+						: valorDescontoPorCompra);
 
 				BigDecimal totalDescontos = descontosNaFatura.add(valorPagamento);
 

@@ -16,5 +16,4 @@ public interface CartaoRepository extends JpaRepository<Cartao, Long> {
 	Page<Cartao> findByNome(@Param("search") String search, Pageable pageable);
 
 	List<Cartao> findByAtivo(boolean ativo);
-
 }
