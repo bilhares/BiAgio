@@ -3,12 +3,15 @@ package com.biagio.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +46,23 @@ public class UsuarioService implements UserDetailsService {
 			authorities[i] = perfis.get(i).getDesc();
 		}
 		return authorities;
+	}
+
+	public Usuario salvarUsuario(Usuario u) {
+		if (usuarioExiste(u.getEmail()))
+			throw new DataIntegrityViolationException("Usuário já cadastrado na base");
+
+		String crypt = new BCryptPasswordEncoder().encode(u.getSenha());
+		String verificador = RandomStringUtils.randomAlphanumeric(6);
+
+		u.setSenha(crypt);
+		u.setCodigoVerificador(verificador);
+
+		return repository.save(u);
+	}
+
+	public boolean usuarioExiste(String email) {
+		Optional<Usuario> usuarioEncontrado = buscarPorEmailEAtivo(email);
+		return usuarioEncontrado.isPresent();
 	}
 }

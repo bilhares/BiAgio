@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div class="layout-content" layout:fragment="corpo">
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2 class="titulo"><i class="fs-4 bi-person-add"></i> Cadastar usuário</h2>
+			</div>
+			<div class="col-md-2 offset-md-6">
+				<a class="btn btn-success" th:href="@{/cartoes/listar}">Listar Usuários <i class="bi bi-list"></i></a>
+			</div>
+			<hr>
+		</div>
+
+		<div th:replace="~{fragments/alert}"></div>
+		<form class="row g-3" th:action="@{/usuarios/cadastro/salvar}" th:object="${usuario}" method="POST">
+			<div class="mb-3 col-md-3">
+				<label for="usuarioEmail" class="form-label">Email de Acesso</label>
+				<input type="email" class="form-control" id="usuarioEmail" aria-describedby="emailHelp" th:field="*{email}">
+			</div>
+			<div class="mb-3 col-md-3">
+				<label for="usuarioSenha" class="form-label">Senha Temporária</label>
+				<input type="password" class="form-control" id="usuarioSenha" th:field="*{senha}">
+			</div>
+
+			<div class="mb-3 col-md-3">
+				<label for="perfis" class="form-label">Perfil</label>
+				<select class="form-select" id="perfis" th:field="*{perfis}">
+					<option value="">Selecione...</option>
+					<option th:each="c : ${perfis}" th:value="${c.id}" th:text="${c.desc}"></option>
+				</select>
+			</div>
+
+			<div class="col-12">
+				<button type="submit" class="btn btn-primary">Cadastrar</button>
+			</div>
+
+		</form>
+	</div>
+
+</body>
+
+</html>
