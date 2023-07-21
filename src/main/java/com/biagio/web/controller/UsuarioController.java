@@ -17,6 +17,7 @@ import com.biagio.model.security.Usuario;
 import com.biagio.repository.PerfilRepository;
 import com.biagio.service.UsuarioService;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 @Controller
@@ -46,6 +47,8 @@ public class UsuarioController {
 			attr.addFlashAttribute("sucesso", "Usuário cadastrado com sucesso!");
 		} catch (DataIntegrityViolationException e) {
 			attr.addFlashAttribute("falha", "Cadastro não realizado, email já existente.");
+		} catch (MessagingException e) {
+			attr.addFlashAttribute("falha", "Cadastro não realizado, falha ao enviar email.");
 		}
 
 		return "redirect:/usuarios/cadastro";

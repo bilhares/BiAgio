@@ -19,11 +19,18 @@ import com.biagio.model.security.Perfil;
 import com.biagio.model.security.Usuario;
 import com.biagio.repository.UsuarioRepository;
 
+import jakarta.mail.MessagingException;
+
+import org.springframework.util.Base64Utils;
+
 @Service
 public class UsuarioService implements UserDetailsService {
 
 	@Autowired
 	private UsuarioRepository repository;
+
+	@Autowired
+	private EmailService emailService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -47,8 +54,9 @@ public class UsuarioService implements UserDetailsService {
 		}
 		return authorities;
 	}
-
-	public Usuario salvarUsuario(Usuario u) {
+	
+	@Transactional(readOnly = false)
+	public Usuario salvarUsuario(Usuario u) throws MessagingException {
 		if (usuarioExiste(u.getEmail()))
 			throw new DataIntegrityViolationException("Usuário já cadastrado na base");
 
@@ -58,11 +66,19 @@ public class UsuarioService implements UserDetailsService {
 		u.setSenha(crypt);
 		u.setCodigoVerificador(verificador);
 
-		return repository.save(u);
+		Usuario usuarioSalvo = repository.save(u);
+		emailDeConfirmacaoDeCadastro(usuarioSalvo.getEmail());
+
+		return usuarioSalvo;
 	}
 
 	public boolean usuarioExiste(String email) {
 		Optional<Usuario> usuarioEncontrado = buscarPorEmailEAtivo(email);
 		return usuarioEncontrado.isPresent();
+	}
+
+	public void emailDeConfirmacaoDeCadastro(String email) throws MessagingException {
+		String codigo = Base64Utils.encodeToString(email.getBytes());
+		emailService.enviarPedidoDeConfirmacaoDeCadastro(email, codigo);
 	}
 }
