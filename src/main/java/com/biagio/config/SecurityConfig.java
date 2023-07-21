@@ -34,11 +34,13 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((authorize) -> authorize				
 			// acessos públicos liberados
 			.requestMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
+			.requestMatchers("/usuarios/confirmar/cadastro", "/usuarios/cadastro/ativar").permitAll()
 			
 			//acessos geral
 			.requestMatchers("/", "/home", "/faturas/**").hasAnyAuthority(ADMIN, USUARIO)
 			// acessos privados admin
 			.requestMatchers("/cartoes/**", "/emprestimos/**", "/endividados/**").hasAuthority(ADMIN)
+			.requestMatchers("/usuarios/**").hasAuthority(ADMIN)
 			
 			.anyRequest().authenticated()
 		)

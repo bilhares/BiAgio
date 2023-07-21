@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,26 +22,29 @@
 		<div class="row">
 			<div class="col-md-6" id="form-container">
 				<div th:replace="~{fragments/alert}"></div>
-				<h2 class="title">Login</h2>
+				
+				<h2 class="title">Confirmação de cadastro</h2>
 				<span class="title-underline"></span>
-				<form method="post" th:action="@{/login}">
+				<form method="post" th:action="@{/usuarios/cadastro/ativar}" th:object="${usuario}">
 					<div class="form-floating mb-3">
-						<input  class="form-control" type="email" id="email" name="username"
-							placeholder="digite seu email">
+						<input class="form-control" type="email" id="email" placeholder="digite seu email"
+							th:field="*{email}">
 						<label for="email" class="form-label">Digite seu email</label>
 					</div>
 					<div class="form-floating mb-3">
-						<input  class="form-control" type="password" id="password" name="password"
-							placeholder="digite sua senha">
-						<label for="password" class="form-label">Digite sua senha</label>
+						<input class="form-control" type="password" id="password" name="password"
+							placeholder="Digite sua nova senha" th:field="*{senha}">
+						<label for="password" class="form-label">Digite sua nova senha</label>
+					</div>
+					<div class="form-floating mb-3">
+						<input class="form-control" type="text" id="codigo" name="codigo"
+							placeholder="digite o código verificador" th:field="*{codigoVerificador}">
+						<label for="codigo" class="form-label">Digite o código verificador</label>
 					</div>
 					<div class="d-grid">
-						<input type="submit" class="btn btn-primary text-uppercase" value="Entrar">
+						<input type="submit" class="btn btn-primary text-uppercase" value="Atualizar Cadastro">
 					</div>
 				</form>
-				<div class="col-12" id="link-container">
-					<a href="cadastro.html">Ainda não tenho cadastro</a>
-				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="col-12">

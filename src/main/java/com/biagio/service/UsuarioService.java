@@ -54,20 +54,20 @@ public class UsuarioService implements UserDetailsService {
 		}
 		return authorities;
 	}
-	
+
 	@Transactional(readOnly = false)
 	public Usuario salvarUsuario(Usuario u) throws MessagingException {
 		if (usuarioExiste(u.getEmail()))
 			throw new DataIntegrityViolationException("Usuário já cadastrado na base");
 
-		String crypt = new BCryptPasswordEncoder().encode(u.getSenha());
 		String verificador = RandomStringUtils.randomAlphanumeric(6);
+		String crypt = new BCryptPasswordEncoder().encode(verificador);
 
 		u.setSenha(crypt);
 		u.setCodigoVerificador(verificador);
 
 		Usuario usuarioSalvo = repository.save(u);
-		emailDeConfirmacaoDeCadastro(usuarioSalvo.getEmail());
+		emailDeConfirmacaoDeCadastro(usuarioSalvo.getEmail(), usuarioSalvo.getCodigoVerificador());
 
 		return usuarioSalvo;
 	}
@@ -77,8 +77,14 @@ public class UsuarioService implements UserDetailsService {
 		return usuarioEncontrado.isPresent();
 	}
 
-	public void emailDeConfirmacaoDeCadastro(String email) throws MessagingException {
+	public void emailDeConfirmacaoDeCadastro(String email, String verificador) throws MessagingException {
 		String codigo = Base64Utils.encodeToString(email.getBytes());
-		emailService.enviarPedidoDeConfirmacaoDeCadastro(email, codigo);
+		emailService.enviarPedidoDeConfirmacaoDeCadastro(email, codigo, verificador);
+	}
+
+	@Transactional(readOnly = false)
+	public void alterarSenha(Usuario usuario, String senha) {
+		usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
+		repository.save(usuario);
 	}
 }
