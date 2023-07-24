@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import com.biagio.model.dto.DetalheCartaoDTO;
 import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.model.entity.StatusParcela;
+import com.biagio.service.UsuarioService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -24,6 +26,9 @@ public class FaturaRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+
+	@Autowired
+	UsuarioService usuarioService;
 
 	public Page<FaturaDTO> obterTodasAsFaturasPorStatus(Pageable pageable, List<StatusParcela> status) {
 
@@ -40,13 +45,15 @@ public class FaturaRepository {
 		sql.append("JOIN e.cartao c ");
 		sql.append("WHERE e.ativo = 1 ");
 		sql.append("AND ce.status in :statusList ");
+		sql.append("AND c.usuario = :usuario ");
 		sql.append("GROUP BY ce.dataVencimento, c.id, c.nome, ce.desconto ");
 		sql.append("ORDER BY ce.dataVencimento");
 
 		Long totalResults = count(status, sql);
 
 		List<FaturaDTO> resultList = entityManager.createQuery(sql.toString(), FaturaDTO.class)
-				.setParameter("statusList", status).setFirstResult(startItem).setMaxResults(pageSize).getResultList();
+				.setParameter("statusList", status).setParameter("usuario", usuarioService.obterUsuarioLogado())
+				.setFirstResult(startItem).setMaxResults(pageSize).getResultList();
 
 		Page<FaturaDTO> page = new PageImpl<>(resultList, PageRequest.of(currentPage, pageSize), totalResults);
 
@@ -56,7 +63,7 @@ public class FaturaRepository {
 	private Long count(List<StatusParcela> status, StringBuilder sql) {
 
 		int totalCount = entityManager.createQuery(sql.toString(), FaturaDTO.class).setParameter("statusList", status)
-				.getResultList().size();
+				.setParameter("usuario", usuarioService.obterUsuarioLogado()).getResultList().size();
 
 		return Long.valueOf(totalCount);
 	}
@@ -92,10 +99,12 @@ public class FaturaRepository {
 		sql.append("JOIN e.cartao c ");
 		sql.append("WHERE e.ativo = 1 ");
 		sql.append("AND ce.status in :statusList ");
+		sql.append("AND c.usuario = :usuario ");
 
 		List<StatusParcela> statusList = List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO);
 
-		Query query = entityManager.createQuery(sql.toString()).setParameter("statusList", statusList);
+		Query query = entityManager.createQuery(sql.toString()).setParameter("statusList", statusList)
+				.setParameter("usuario", usuarioService.obterUsuarioLogado());
 
 		BigDecimal sum = (BigDecimal) query.getSingleResult();
 
@@ -115,13 +124,14 @@ public class FaturaRepository {
 		sql.append("WHERE ");
 		sql.append("e.ativo = 1 ");
 		sql.append("AND ce.status in :statusList ");
+		sql.append("AND c.usuario = :usuario ");
 		sql.append("GROUP BY c.id, c.nome, c.limite ");
 
 		List<StatusParcela> statusList = List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO);
 		List<DetalheCartaoDTO> resultList = entityManager.createQuery(sql.toString(), DetalheCartaoDTO.class)
-				.setParameter("statusList", statusList).getResultList();
-		
-		return resultList;
+				.setParameter("statusList", statusList).setParameter("usuario", usuarioService.obterUsuarioLogado())
+				.getResultList();
 
+		return resultList;
 	}
 }

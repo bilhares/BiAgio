@@ -1,4 +1,8 @@
+DROP TABLE IF EXISTS controle_emprestimo_parcela;
+DROP TABLE IF EXISTS emprestimo;
+DROP TABLE IF EXISTS endividado;
 DROP TABLE IF EXISTS cartao;
+
 CREATE TABLE cartao
 (
     id BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
@@ -10,7 +14,6 @@ CREATE TABLE cartao
     dia_vencimento INT NOT NULL
 );
 
-DROP TABLE IF EXISTS endividado;
 CREATE TABLE endividado
 (
     id BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
@@ -20,7 +23,6 @@ CREATE TABLE endividado
     cpf VARCHAR(11) NOT NULL,
 );
 
-DROP TABLE IF EXISTS emprestimo;
 CREATE TABLE emprestimo
 (
     id BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
@@ -35,7 +37,6 @@ CREATE TABLE emprestimo
     endividado_id BIGINT NOT NULL FOREIGN KEY REFERENCES endividado(id)
 );
 
-DROP TABLE IF EXISTS controle_emprestimo_parcela;
 CREATE TABLE controle_emprestimo_parcela
 (
     id BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
@@ -50,3 +51,4 @@ CREATE TABLE controle_emprestimo_parcela
 );
 
 ALTER TABLE controle_emprestimo_parcela ADD desconto DECIMAL(19,2) NULL;
+ALTER TABLE cartao add usuario_id bigint not null, FOREIGN KEY(usuario_id) REFERENCES usuario(id); 

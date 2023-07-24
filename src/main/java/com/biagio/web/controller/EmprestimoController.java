@@ -1,8 +1,11 @@
 package com.biagio.web.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -18,10 +21,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.biagio.model.entity.Cartao;
 import com.biagio.model.entity.Emprestimo;
 import com.biagio.model.entity.Endividado;
+import com.biagio.model.security.Usuario;
 import com.biagio.repository.CartaoRepository;
 import com.biagio.repository.EmprestimoRepository;
 import com.biagio.repository.EndividadoRepository;
+import com.biagio.repository.UsuarioRepository;
 import com.biagio.service.EmprestimoService;
+import com.biagio.service.UsuarioService;
 import com.biagio.web.validator.EmprestimoValidator;
 
 import jakarta.validation.Valid;
@@ -40,8 +46,11 @@ public class EmprestimoController {
 	CartaoRepository cartaoRepository;
 
 	@Autowired
+	UsuarioService usuarioService;
+
+	@Autowired
 	EmprestimoService service;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(new EmprestimoValidator());
@@ -49,7 +58,9 @@ public class EmprestimoController {
 
 	@GetMapping("/listar")
 	public String listar(ModelMap model) {
-		model.addAttribute("emprestimos", emprestimoRepository.findAll());
+		Usuario usuario = usuarioService.obterUsuarioLogado();
+		List<Cartao> cartoes = cartaoRepository.findByAtivoAndUsuario(true, usuario);
+		model.addAttribute("emprestimos", emprestimoRepository.findByCartaoIn(cartoes));
 		return "/emprestimo/listar";
 	}
 
@@ -57,7 +68,7 @@ public class EmprestimoController {
 	public String cadastro(Emprestimo entity) {
 		return "/emprestimo/cadastrar";
 	}
-	
+
 	@GetMapping("/editar/{id}")
 	public String editar(@PathVariable("id") Long id, ModelMap model) {
 		model.addAttribute("emprestimo", emprestimoRepository.findById(id).get());
@@ -84,8 +95,9 @@ public class EmprestimoController {
 	}
 
 	@ModelAttribute("cartoes")
-	public List<Cartao> getCartoes() {
-		return cartaoRepository.findByAtivo(true);
+	public List<Cartao> getCartoes(@AuthenticationPrincipal User user) {
+		Usuario usuario = usuarioService.obterUsuarioLogado();
+		return cartaoRepository.findByAtivoAndUsuario(true, usuario);
 	}
 
 }

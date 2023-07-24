@@ -3,6 +3,8 @@ package com.biagio.web.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.biagio.model.entity.Cartao;
+import com.biagio.model.security.Usuario;
 import com.biagio.repository.CartaoRepository;
+import com.biagio.repository.UsuarioRepository;
+import com.biagio.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
@@ -24,9 +29,13 @@ public class CartaoController {
 	@Autowired
 	CartaoRepository cartaoRepository;
 
+	@Autowired
+	UsuarioService usuarioService;
+
 	@GetMapping("/listar")
 	public String listar(ModelMap model) {
-		model.addAttribute("cartoes", cartaoRepository.findAll());
+
+		model.addAttribute("cartoes", cartaoRepository.findByUsuario(usuarioService.obterUsuarioLogado()));
 		return "/cartao/listar";
 	}
 
@@ -48,6 +57,7 @@ public class CartaoController {
 			return "/cartao/cadastrar";
 		}
 
+		cartao.setUsuario(usuarioService.obterUsuarioLogado());
 		cartao.setAtivo(true);
 		cartaoRepository.save(cartao);
 		attr.addFlashAttribute("sucesso", "Cartão cadastrado com sucesso!");

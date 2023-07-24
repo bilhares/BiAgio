@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,14 +16,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import com.biagio.model.security.Perfil;
 import com.biagio.model.security.Usuario;
 import com.biagio.repository.UsuarioRepository;
 
 import jakarta.mail.MessagingException;
-
-import org.springframework.util.Base64Utils;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -86,5 +87,13 @@ public class UsuarioService implements UserDetailsService {
 	public void alterarSenha(Usuario usuario, String senha) {
 		usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
 		repository.save(usuario);
+	}
+
+	public Usuario obterUsuarioLogado() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		Usuario usuario = repository.findByEmail(user.getUsername());
+
+		return usuario;
 	}
 }

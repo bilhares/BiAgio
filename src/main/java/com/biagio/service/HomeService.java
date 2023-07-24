@@ -27,7 +27,7 @@ public class HomeService {
 		Page<FaturaDTO> faturas = faturaRepository.obterTodasAsFaturasPorStatus(PageRequest.of(0, 1),
 				List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO));
 
-		FaturaDTO proximaFatura = faturas.getContent().get(0);
+		FaturaDTO proximaFatura = faturas.isEmpty() ? new FaturaDTO() : faturas.getContent().get(0);
 
 		List<DetalheCartaoDTO> detalhesCartoes = faturaRepository.obterDetalhesCartoes();
 
