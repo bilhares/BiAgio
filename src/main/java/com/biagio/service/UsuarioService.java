@@ -33,6 +33,8 @@ public class UsuarioService implements UserDetailsService {
 	@Autowired
 	private EmailService emailService;
 
+	private Usuario usuario;
+
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -91,9 +93,21 @@ public class UsuarioService implements UserDetailsService {
 
 	public Usuario obterUsuarioLogado() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth == null)
+			return this.usuario;
+
 		User user = (User) auth.getPrincipal();
 		Usuario usuario = repository.findByEmail(user.getUsername());
 
 		return usuario;
 	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 }
