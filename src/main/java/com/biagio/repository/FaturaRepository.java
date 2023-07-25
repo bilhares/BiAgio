@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import com.biagio.model.dto.DetalheCartaoDTO;
 import com.biagio.model.dto.DetalheFaturaDTO;
+import com.biagio.model.dto.EmprestimoDTO;
 import com.biagio.model.dto.FaturaDTO;
+import com.biagio.model.dto.ResumoEndividadosDTO;
 import com.biagio.model.entity.StatusParcela;
 import com.biagio.service.UsuarioService;
 
@@ -133,5 +135,76 @@ public class FaturaRepository {
 				.getResultList();
 
 		return resultList;
+	}
+
+	public List<ResumoEndividadosDTO> obterResumoDosEndividados() {
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT NEW com.biagio.model.dto.ResumoEndividadosDTO( ");
+		sql.append(" en.id, en.nome,  (SUM(e.valorParcela) - SUM(COALESCE(ce.desconto, 0)))");
+		sql.append(") ");
+		sql.append("FROM ControleEmprestimoParcela ce ");
+		sql.append("JOIN ce.emprestimo e ");
+		sql.append("JOIN e.cartao c ");
+		sql.append("JOIN e.endividado en ");
+		sql.append("WHERE ");
+		sql.append("e.ativo = 1 ");
+		sql.append("AND ce.status in :statusList ");
+		sql.append("AND c.usuario = :usuario ");
+		sql.append("GROUP BY en.id, en.nome ");
+
+		List<StatusParcela> statusList = List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO);
+
+		return entityManager.createQuery(sql.toString(), ResumoEndividadosDTO.class)
+				.setParameter("statusList", statusList).setParameter("usuario", usuarioService.obterUsuarioLogado())
+				.getResultList();
+	}
+
+	public List<EmprestimoDTO> obterEmprestimosDeUmEndividado(Long endividadoId) {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT DISTINCT NEW com.biagio.model.dto.EmprestimoDTO( ");
+		sql.append("  e.id, e.nome, e.valorTotal, e.qtdParcelas, e.valorParcela, e.descricao ");
+		sql.append(") ");
+		sql.append("FROM ControleEmprestimoParcela ce ");
+		sql.append("JOIN ce.emprestimo e ");
+		sql.append("JOIN e.cartao c ");
+		sql.append("JOIN e.endividado en ");
+		sql.append("WHERE ");
+		sql.append("e.ativo = 1 ");
+		sql.append("AND ce.status in :statusList ");
+		sql.append("AND c.usuario = :usuario ");
+		sql.append("AND en.id = :endividado ");
+		sql.append(" ORDER BY e.id ");
+
+		List<StatusParcela> statusList = List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO);
+
+		return entityManager.createQuery(sql.toString(), EmprestimoDTO.class).setParameter("statusList", statusList)
+				.setParameter("usuario", usuarioService.obterUsuarioLogado()).setParameter("endividado", endividadoId)
+				.getResultList();
+	}
+
+	public List<FaturaDTO> obterFaturasDeUmEndividado(Long endividadoId) {
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(
+				"SELECT NEW com.biagio.model.dto.FaturaDTO(ce.dataVencimento, (SUM(e.valorParcela) - SUM(COALESCE(ce.desconto, 0))), c.id, c.nome) ");
+		sql.append("FROM ControleEmprestimoParcela ce ");
+		sql.append("JOIN ce.emprestimo e ");
+		sql.append("JOIN e.cartao c ");
+		sql.append("JOIN e.endividado en ");
+		sql.append("WHERE e.ativo = 1 ");
+		sql.append("AND ce.status in :statusList ");
+		sql.append("AND c.usuario = :usuario ");
+		sql.append("AND en.id = :endividado ");
+		sql.append("GROUP BY ce.dataVencimento, c.id, c.nome, ce.desconto ");
+		sql.append("ORDER BY ce.dataVencimento");
+
+		List<StatusParcela> statusList = List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO);
+
+		return entityManager.createQuery(sql.toString(), FaturaDTO.class).setParameter("statusList", statusList)
+				.setParameter("usuario", usuarioService.obterUsuarioLogado()).setParameter("endividado", endividadoId)
+				.getResultList();
 	}
 }

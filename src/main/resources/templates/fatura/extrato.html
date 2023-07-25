@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Bank Extract</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+
+		.center {
+			text-align: center;
+		}
+
+		.section {
+			margin-bottom: 15px;
+		}
+
+		.sub-section {
+			margin-left: 20px;
+			margin-bottom: 5px;
+		}
+
+		.label {
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body class="center">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="600"
+		style="border-collapse: collapse; padding: 40px 30px 40px 30px; font-family: Arial, Helvetica, sans-serif;">
+		<tr>
+			<td align="center" style="padding: 20px 0 10px 0;">
+				<img src="cid:logo" alt="http://localhost:8080/"
+					style="display: block; margin-left: auto; margin-right: auto; width: 15%;" />
+				<h1 style="font-weight: 200;">Bilhares Agiotagem</h1>
+				<p style="margin-bottom: 0;">BIAGIO</p>
+			</td>
+		</tr>
+	</table>
+
+	<h1>BILHARES AGIOTAGEM</h1>
+
+	<div class="section center">
+		<div class="label">Endividado: <span th:text="${extrato.endividadoNome}"></span></div>
+		<div>Total Devido: <span th:text="|R$ ${{extrato.totalDivida}}|"></span></div>
+	</div>
+	<hr>
+	<div class="section center">
+		<div class="label">Compras:</div>
+		<div class="sub-section center" th:each="e : ${extrato.compras}">
+			<div>Nome: <span th:text="${e.nome}"></span></div>
+			<div>Valor: <span th:text="|R$ ${{e.valor}}|"></span></div>
+			<div>Qtd Parcelas: <span th:text="${e.qtdParcelas}"></span></div>
+			<div>Valor Parcela: <span th:text="|R$ ${{e.valorParcela}}|"></span></div>
+			<div>Descrição: <span th:text="${e.descricao}"></span></div>
+			<hr>
+		</div>
+	</div>
+
+	<div class="section center">
+		<div class="label">Faturas:</div>
+		<div class="sub-section center" th:each="f : ${extrato.faturas}">
+			<div>Data Vencimento: <span th:text="${#temporals.format(f.dataVencimento, 'dd/MM/yyyy')}"></span></div>
+			<div>Valor: <span th:text="|R$ ${{f.valor}}|"></span></div>
+			<hr>
+		</div>
+	</div>
+</body>
+
+</html>
