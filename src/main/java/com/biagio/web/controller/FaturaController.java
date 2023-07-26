@@ -3,6 +3,7 @@ package com.biagio.web.controller;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.model.entity.ControleEmprestimoParcela;
+import com.biagio.model.entity.Endividado;
 import com.biagio.model.entity.StatusParcela;
+import com.biagio.repository.EndividadoRepository;
 import com.biagio.service.FaturaService;
 import com.biagio.util.FaturaUtils;
 
@@ -32,21 +36,31 @@ public class FaturaController {
 	@Autowired
 	FaturaService faturaService;
 
+	@Autowired
+	EndividadoRepository endividadoRepository;
+
 	@GetMapping("/listar")
 	public String listar(ModelMap model, @RequestParam("page") Optional<Integer> page,
-			@RequestParam("size") Optional<Integer> size) {
+			@RequestParam("size") Optional<Integer> size,
+			@RequestParam(name = "endividado", required = false) Long endividado,
+			@RequestParam(name = "status", required = false) StatusParcela status) {
 
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(5);
 
 		Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
 
-		List<StatusParcela> statusList = List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO);
+		List<StatusParcela> statusList = status == null ? List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO)
+				: List.of(status);
+		List<Long> endividados = endividado == null ? endividadoRepository.findAllIds() : List.of(endividado);
 
-		Page<FaturaDTO> acutalPage = faturaService.obterFaturas(pageable, statusList);
+		Page<FaturaDTO> acutalPage = faturaService.obterFaturas(pageable, statusList, endividados);
 
 		model.addAttribute("page", acutalPage);
 		model.addAttribute("totalDeRegistros", acutalPage.getTotalElements());
+
+		model.addAttribute("selectedEndividado", endividado);
+		model.addAttribute("selectedStatus", status);
 
 		return "/fatura/listar";
 	}
@@ -121,5 +135,21 @@ public class FaturaController {
 		}
 
 		return "redirect:/faturas/listar";
+	}
+
+	@GetMapping("/limpar-filtros")
+	public String clearFilters() {
+		// Redirect to the original listing page without any filter parameters
+		return "redirect:/faturas/listar";
+	}
+
+	@ModelAttribute("endividados")
+	public List<Endividado> getEndividados() {
+		return endividadoRepository.findByAtivo(true);
+	}
+
+	@ModelAttribute("listaStatus")
+	public List<StatusParcela> getStatus() {
+		return Arrays.asList(StatusParcela.values());
 	}
 }

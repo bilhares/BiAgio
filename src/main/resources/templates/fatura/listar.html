@@ -15,6 +15,42 @@
 			<hr>
 		</div>
 		<div th:replace="~{fragments/alert}"></div>
+
+		<div class="row">
+			<form class="row" th:action="@{/faturas/listar}" method="GET">
+
+				<div class="col-md-2">
+					<label for="endividado">Endividado</label>
+					<select class="form-select" id="endividado" name="endividado" required>
+						<option value="">Selecione ...</option>
+						<option th:each="c : ${endividados}" th:value="${c.id}" th:text="${c.nome}"
+							th:selected="${c.id == selectedEndividado}"></option>
+					</select>
+				</div>
+
+				<div class="col-md-2">
+					<label for="status">Status</label>
+					<select class="form-select" id="status" name="status" required>
+						<option value="">Selecione ...</option>
+						<option th:each="s : ${listaStatus}" th:value="${s}" th:text="${s}"
+							th:selected="${s == selectedStatus}"></option>
+					</select>
+				</div>
+
+				<div class="col-md-1 mb-4 mt-4">
+					<button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+						title="Buscar"><i class="bi bi-search"></i></button>
+				</div>
+				<div class="row">
+					<div class="col-md-3 mb-4">
+						<a th:href="@{/faturas/limpar-filtros}" data-bs-toggle="tooltip" data-bs-placement="top"
+							title="Limpar Filtros">Limpar Filtros</a>
+					</div>
+				</div>
+
+			</form>
+		</div>
+
 		<div class="table-responsive">
 			<table class="table table-striped table-sm">
 				<thead>
@@ -39,7 +75,7 @@
 										<i class="bi bi-search"></i></a>
 								</div>
 								<div class="btn-group" role="group" aria-label="edt">
-		
+
 									<button class="btn btn-outline-danger" type="button" data-bs-toggle="modal"
 										th:attr="data-bs-target='#modal_decisao_fatura'+${f.cartao}"
 										title="Informar Pagamento">
@@ -60,18 +96,21 @@
 				<ul class="pagination justify-content-center">
 
 					<li class="page-item" th:class="${page.first ? 'disabled' : ''}">
-						<a class="page-link" th:href="@{/faturas/listar(page=${page.number})}">&laquo;</a>
+						<a class="page-link"
+							th:href="@{/faturas/listar(page=${page.number}, endividado=${selectedEndividado}, status=${selectedStatus})}">&laquo;</a>
 					</li>
 
 
 					<li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, page.totalPages)}"
 						th:class="${pageNumber == page.number + 1 ? 'active' : ''}">
 						<a class="page-link" th:if="${pageNumber >= 1 && pageNumber <= page.totalPages}"
-							th:href="@{/faturas/listar(page=${pageNumber})}" th:text="${pageNumber}"></a>
+							th:href="@{/faturas/listar(page=${pageNumber}, endividado=${selectedEndividado}, status=${selectedStatus})}"
+							th:text="${pageNumber}"></a>
 					</li>
 
 					<li class="page-item" th:class="${page.last ? 'disabled' : ''}">
-						<a class="page-link" th:href="@{/faturas/listar(page=${page.number+2})}">&raquo;</a>
+						<a class="page-link"
+							th:href="@{/faturas/listar(page=${page.number+2}, endividado=${selectedEndividado}, status=${selectedStatus})}">&raquo;</a>
 					</li>
 				</ul>
 			</nav>

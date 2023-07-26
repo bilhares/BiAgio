@@ -16,6 +16,7 @@ import com.biagio.model.dto.DetalheFaturaDTO;
 import com.biagio.model.dto.EmprestimoDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.model.dto.ResumoEndividadosDTO;
+import com.biagio.model.entity.Endividado;
 import com.biagio.model.entity.StatusParcela;
 import com.biagio.service.UsuarioService;
 
@@ -32,7 +33,8 @@ public class FaturaRepository {
 	@Autowired
 	UsuarioService usuarioService;
 
-	public Page<FaturaDTO> obterTodasAsFaturasPorStatus(Pageable pageable, List<StatusParcela> status) {
+	public Page<FaturaDTO> obterTodasAsFaturasPorStatusEEndividados(Pageable pageable, List<StatusParcela> status,
+			List<Long> endividados) {
 
 		int pageSize = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
@@ -45,27 +47,31 @@ public class FaturaRepository {
 		sql.append("FROM ControleEmprestimoParcela ce ");
 		sql.append("JOIN ce.emprestimo e ");
 		sql.append("JOIN e.cartao c ");
+		sql.append("JOIN e.endividado en ");
 		sql.append("WHERE e.ativo = 1 ");
 		sql.append("AND ce.status in :statusList ");
 		sql.append("AND c.usuario = :usuario ");
+		sql.append("AND en.id in :endividados ");
 		sql.append("GROUP BY ce.dataVencimento, c.id, c.nome, ce.desconto ");
 		sql.append("ORDER BY ce.dataVencimento");
 
-		Long totalResults = count(status, sql);
+		Long totalResults = count(status, endividados, sql);
 
 		List<FaturaDTO> resultList = entityManager.createQuery(sql.toString(), FaturaDTO.class)
 				.setParameter("statusList", status).setParameter("usuario", usuarioService.obterUsuarioLogado())
-				.setFirstResult(startItem).setMaxResults(pageSize).getResultList();
+				.setParameter("endividados", endividados).setFirstResult(startItem).setMaxResults(pageSize)
+				.getResultList();
 
 		Page<FaturaDTO> page = new PageImpl<>(resultList, PageRequest.of(currentPage, pageSize), totalResults);
 
 		return page;
 	}
 
-	private Long count(List<StatusParcela> status, StringBuilder sql) {
+	private Long count(List<StatusParcela> status, List<Long> endividados, StringBuilder sql) {
 
 		int totalCount = entityManager.createQuery(sql.toString(), FaturaDTO.class).setParameter("statusList", status)
-				.setParameter("usuario", usuarioService.obterUsuarioLogado()).getResultList().size();
+				.setParameter("usuario", usuarioService.obterUsuarioLogado()).setParameter("endividados", endividados)
+				.getResultList().size();
 
 		return Long.valueOf(totalCount);
 	}

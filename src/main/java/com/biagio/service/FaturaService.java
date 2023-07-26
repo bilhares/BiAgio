@@ -26,8 +26,8 @@ public class FaturaService {
 	@Autowired
 	FaturaRepository faturaRepository;
 
-	public Page<FaturaDTO> obterFaturas(Pageable pageable, List<StatusParcela> statusList) {
-		return faturaRepository.obterTodasAsFaturasPorStatus(pageable, statusList);
+	public Page<FaturaDTO> obterFaturas(Pageable pageable, List<StatusParcela> statusList, List<Long> endividados) {
+		return faturaRepository.obterTodasAsFaturasPorStatusEEndividados(pageable, statusList, endividados);
 	}
 
 	public List<DetalheFaturaDTO> obterDetalhesFatura(Long cartaoId, LocalDate dataVencimento) {

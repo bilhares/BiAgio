@@ -12,6 +12,7 @@ import com.biagio.model.dto.DetalheCartaoDTO;
 import com.biagio.model.dto.FaturaDTO;
 import com.biagio.model.dto.ResumoFaturasHomeDTO;
 import com.biagio.model.entity.StatusParcela;
+import com.biagio.repository.EndividadoRepository;
 import com.biagio.repository.FaturaRepository;
 
 @Service
@@ -19,13 +20,16 @@ public class HomeService {
 
 	@Autowired
 	FaturaRepository faturaRepository;
+	
+	@Autowired
+	EndividadoRepository endividadosRepository;
 
 	public ResumoFaturasHomeDTO obterResumoDasFaturas() {
 
 		BigDecimal totalDevido = faturaRepository.obterValorTotalDosEmprestimos();
-
-		Page<FaturaDTO> faturas = faturaRepository.obterTodasAsFaturasPorStatus(PageRequest.of(0, 1),
-				List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO));
+		
+		Page<FaturaDTO> faturas = faturaRepository.obterTodasAsFaturasPorStatusEEndividados(PageRequest.of(0, 1),
+				List.of(StatusParcela.NAO_PAGO, StatusParcela.ATRASADO), endividadosRepository.findAllIds());
 
 		FaturaDTO proximaFatura = faturas.isEmpty() ? new FaturaDTO() : faturas.getContent().get(0);
 
