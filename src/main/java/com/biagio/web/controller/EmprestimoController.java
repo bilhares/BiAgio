@@ -89,6 +89,18 @@ public class EmprestimoController {
 		return "redirect:/emprestimos/cadastro";
 	}
 
+	@GetMapping("/excluir/{id}")
+	public String excluir(@PathVariable("id") Long id, RedirectAttributes attr) {
+		try {
+			service.excluirEmprestimo(id);
+			attr.addFlashAttribute("sucesso", "Emprestimo deletado");
+		} catch (Exception e) {
+			attr.addFlashAttribute("falha", "Erro ao deletar " + e.getMessage());
+		}
+
+		return "redirect:/emprestimos/listar";
+	}
+
 	@ModelAttribute("endividados")
 	public List<Endividado> getEndividados() {
 		return endividadoRepository.findByAtivo(true);
